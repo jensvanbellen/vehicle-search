@@ -1,0 +1,86 @@
+[project]
+name = "vehicle-finder"
+version = "0.1.0"
+description = "Local used car & motorcycle finder for NL/DE with cross-platform merging and explainable scoring"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+dependencies = [
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "sqlmodel>=0.0.22",
+    "httpx>=0.27",
+    "selectolax>=0.3.21",
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
+    "structlog>=24.1",
+    "typer>=0.12",
+    "pyyaml>=6.0",
+    "rapidfuzz>=3.9",
+    "pillow>=10.3",
+    "imagehash>=4.3",
+]
+
+[project.optional-dependencies]
+# Playwright is ONLY needed for the bmw.de live transport. Everything else runs without it.
+browser = ["playwright>=1.44"]
+
+[project.scripts]
+vehicle-search = "vehicle_finder.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "respx>=0.21",
+    "ruff>=0.5",
+    "pyright>=1.1.370",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vehicle_finder"]
+
+# ----------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "W",   # pyflakes / pycodestyle
+    "I",             # isort
+    "UP",            # pyupgrade
+    "B",             # bugbear
+    "C4",            # comprehensions
+    "SIM",           # simplify
+    "TID",           # tidy imports
+    "RUF",
+]
+ignore = ["B008"]    # Typer/FastAPI use callables in defaults by design
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+# ----------------------------------------------------------------------------
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false       # selectolax/imagehash ship no stubs
+venvPath = "."
+venv = ".venv"
+
+# ----------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q"
+filterwarnings = ["error::DeprecationWarning:vehicle_finder.*"]

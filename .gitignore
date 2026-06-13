@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.uv/
+
+# Project data & secrets (NEVER commit listings DB, cookies, credentials, browser profiles)
+/data/*.db
+/data/*.sqlite3
+/data/raw/
+/data/exports/
+.env
+*.cookies
+*.har
+playwright-profile/
+.auth/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.pyright/
+htmlcov/
+.coverage
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
