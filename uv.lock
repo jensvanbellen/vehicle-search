@@ -1212,6 +1212,7 @@ dependencies = [
     { name = "imagehash" },
     { name = "jinja2" },
     { name = "pillow" },
+    { name = "playwright" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-multipart" },
@@ -1222,11 +1223,6 @@ dependencies = [
     { name = "structlog" },
     { name = "typer" },
     { name = "uvicorn", extra = ["standard"] },
-]
-
-[package.optional-dependencies]
-browser = [
-    { name = "playwright" },
 ]
 
 [package.dev-dependencies]
@@ -1245,7 +1241,7 @@ requires-dist = [
     { name = "imagehash", specifier = ">=4.3" },
     { name = "jinja2", specifier = ">=3.1" },
     { name = "pillow", specifier = ">=10.3" },
-    { name = "playwright", marker = "extra == 'browser'", specifier = ">=1.44" },
+    { name = "playwright", specifier = ">=1.44" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pydantic-settings", specifier = ">=2.3" },
     { name = "python-multipart", specifier = ">=0.0.9" },
@@ -1257,7 +1253,6 @@ requires-dist = [
     { name = "typer", specifier = ">=0.12" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.30" },
 ]
-provides-extras = ["browser"]
 
 [package.metadata.requires-dev]
 dev = [

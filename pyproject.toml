@@ -22,11 +22,11 @@ dependencies = [
     "rapidfuzz>=3.9",
     "pillow>=10.3",
     "imagehash>=4.3",
+    # Playwright is the live transport for the bmw.de SPA (enabled by default). The pip
+    # package is lightweight; the browser binary is installed separately, on demand:
+    #   uv run playwright install chromium
+    "playwright>=1.44",
 ]
-
-[project.optional-dependencies]
-# Playwright is ONLY needed for the bmw.de live transport. Everything else runs without it.
-browser = ["playwright>=1.44"]
 
 [project.scripts]
 vehicle-search = "vehicle_finder.cli:app"

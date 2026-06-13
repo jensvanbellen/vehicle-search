@@ -66,11 +66,25 @@ class SearchTarget(BaseModel):
     min_power_hp: int | None = None
     max_power_hp: int | None = None
 
+    # Variant/engine narrowing, matched against the listing variant + title (space-insensitive,
+    # case-insensitive). e.g. variant_includes: ["30d", "40d"] keeps only those diesels.
+    variant_includes: list[str] = []
+    variant_excludes: list[str] = []
+
     # Per-source code maps, e.g. {"bmw-nl": {"serie": "BMW X Serie", "model": "X5"}}
     source_codes: dict[str, dict[str, Any]] = {}
 
     def codes_for(self, source: str) -> dict[str, Any]:
         return self.source_codes.get(source, {})
+
+    def variant_allowed(self, text: str) -> bool:
+        """Whether a listing's variant/title text passes the include/exclude variant filter."""
+        haystack = text.lower().replace(" ", "")
+        if self.variant_includes and not any(
+            v.lower().replace(" ", "") in haystack for v in self.variant_includes
+        ):
+            return False
+        return not any(v.lower().replace(" ", "") in haystack for v in self.variant_excludes)
 
 
 class SearchesFile(BaseModel):

@@ -43,6 +43,15 @@ from vehicle_finder.sources.http import PoliteClient
 
 log = get_logger("bmw_de")
 
+_SCROLL_STEPS = 6  # lazy-load passes after consent
+# Cookie-consent accept buttons (German). Accepting cookies is a normal user action.
+_CONSENT_SELECTORS = (
+    'button:has-text("Akzeptieren")',
+    'button:has-text("Alle akzeptieren")',
+    'button:has-text("Zustimmen")',
+    "#onetrust-accept-btn-handler",
+)
+
 # Markers that indicate an anti-bot interstitial — when seen, STOP (no escalation).
 _CHALLENGE_MARKERS = (
     "just a moment",
@@ -300,27 +309,23 @@ class BmwDeAdapter:
         return not (target.max_year and listing.model_year and listing.model_year > target.max_year)
 
     def _render(self, url: str, headless: bool) -> tuple[Any, str, str]:
-        """Drive a real browser, capturing the offers JSON. Returns (payload, html, title).
+        """Drive a real browser (accept consent, scroll to lazy-load), capturing the offers
+        JSON. Returns (payload, html, title). Raises RuntimeError on a missing browser binary.
 
-        Raises RuntimeError with a clear message if Playwright is unavailable.
+        bmw.de is a SPA backed by BMW's STOLO API (``stolo-data-service…/vehiclesearch/…``);
+        a cookie-consent overlay gates content, so we accept it before scrolling.
         """
-        try:
-            from playwright.sync_api import Response, sync_playwright
-        except ImportError as exc:  # browser extra not installed
-            raise RuntimeError(
-                "bmw-de: playwright not installed — run `uv sync --extra browser` "
-                "and `uv run playwright install chromium` (on an NL network)."
-            ) from exc
+        from playwright.sync_api import Response, sync_playwright
 
         captured: list[dict[str, Any]] = []
 
         def _on_response(response: Response) -> None:
-            ct = response.headers.get("content-type", "")
-            if "json" not in ct:
+            if "json" not in response.headers.get("content-type", ""):
                 return
             low = response.url.lower()
             if not any(
-                k in low for k in ("offer", "search", "vehicle", "/sl/", "gebraucht", "inventory")
+                k in low
+                for k in ("stolo", "offer", "search", "vehicle", "/sl/", "gebraucht", "inventory")
             ):
                 return
             try:
@@ -328,16 +333,27 @@ class BmwDeAdapter:
             except Exception:
                 return
 
-        with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=headless)
-            page = browser.new_page()
-            page.on("response", _on_response)
-            page.goto(url, wait_until="networkidle", timeout=45000)
-            html = page.content()
-            title = page.title()
-            browser.close()
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=headless)
+                page = browser.new_page()
+                page.on("response", _on_response)
+                page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                page.wait_for_timeout(2500)
+                self._accept_consent(page)
+                for _ in range(_SCROLL_STEPS):
+                    page.mouse.wheel(0, 4000)
+                    page.wait_for_timeout(1200)
+                html = page.content()
+                title = page.title()
+                browser.close()
+        except Exception as exc:
+            raise RuntimeError(
+                f"bmw-de: browser run failed ({type(exc).__name__}). If Chromium is missing, "
+                "run `uv run playwright install chromium`. Verify on an NL network."
+            ) from exc
 
-        # Dump raw captures so the user can validate the real field names on first run.
+        # Dump raw captures so the real STOLO field names can be validated on first run.
         if captured:
             raw_dir = REPO_ROOT / "data" / "raw"
             raw_dir.mkdir(parents=True, exist_ok=True)
@@ -347,6 +363,19 @@ class BmwDeAdapter:
 
         best = max((c for c in captured), key=lambda c: len(_find_offer_list(c)), default=None)
         return best, html, title
+
+    @staticmethod
+    def _accept_consent(page: Any) -> None:
+        """Click the cookie-consent accept button if present (legitimate, not anti-bot evasion)."""
+        for selector in _CONSENT_SELECTORS:
+            try:
+                element = page.query_selector(selector)
+                if element is not None:
+                    element.click()
+                    page.wait_for_timeout(1500)
+                    return
+            except Exception:
+                continue
 
 
 def register_adapters() -> None:

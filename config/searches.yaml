@@ -67,6 +67,9 @@ searches:
     min_year: 2021
     max_year: 2023
     countries: [NL, DE]
+    # Diesels only (the 48V mild-hybrid xDrive30d primary + xDrive40d fallback); this drops
+    # the 45e PHEV / 40i petrol / M noise. Matched against variant + title.
+    variant_includes: ["30d", "40d"]
     # Prioritised desirable options (scored when detected in the listing description).
     # Order is informational; the scorer weights each via scoring/features.yaml.
     preferred_equipment:

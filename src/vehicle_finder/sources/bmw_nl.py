@@ -230,6 +230,8 @@ class BmwPremiumSelectionAdapter:
 
     def _passes(self, target: SearchTarget, listing: VehicleListing) -> bool:
         """Client-side safety net — guarantees correctness if a server filter is ignored."""
+        if not target.variant_allowed(f"{listing.variant or ''} {listing.title or ''}"):
+            return False
         if target.min_year and listing.model_year and listing.model_year < target.min_year:
             return False
         if target.max_year and listing.model_year and listing.model_year > target.max_year:

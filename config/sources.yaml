@@ -30,8 +30,8 @@ sources:
     notes: Single importer; numeric brand/model IDs; prices already NL-landed (incl. BPM).
 
   bmw-de:
-    adapter: bmw_de          # SPA; Playwright live transport (implemented in milestone 4)
-    enabled: false
+    adapter: bmw_de          # SPA; Playwright live transport
+    enabled: true
     vehicle_types: [car]
     base_url: https://www.bmw.de
     request_uri: /de-de/sl/gebrauchtwagen/results

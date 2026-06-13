@@ -190,6 +190,8 @@ class DasImportAdapter:
         return params
 
     def _passes(self, target: SearchTarget, listing: VehicleListing) -> bool:
+        if not target.variant_allowed(f"{listing.variant or ''} {listing.title or ''}"):
+            return False
         if target.min_year and listing.model_year and listing.model_year < target.min_year:
             return False
         if target.max_year and listing.model_year and listing.model_year > target.max_year:

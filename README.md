@@ -17,7 +17,7 @@ platforms and **merges duplicates into one consolidated vehicle**, and ranks res
 | `occasions.bmw.nl` | cars | Internal JSON API | ✅ **automated** (verified live) |
 | `occasions.bmw-motorrad.nl` | motorcycles | Same platform | ✅ **automated** (verified live) |
 | `dasimport.nl` | cars (DE imports) | Server-rendered HTML | ✅ **automated** (verified live) |
-| `bmw.de` Gebrauchtwagen | cars | SPA via Playwright | 🧪 **built + fixtures**, live unverified in this env |
+| `bmw.de` Gebrauchtwagen | cars | SPA via Playwright (STOLO API) | 🧪 **enabled**; page loads, results endpoint to validate on an NL network |
 | `marktplaats.nl` | both | Single-listing URL import | ✅ listing pages allowed; **no automated search** |
 | `mobile.de` | both | Manual entry | 🚫 listing pages robots-disallowed → **manual only** |
 
@@ -31,6 +31,21 @@ platforms and **merges duplicates into one consolidated vehicle**, and ranks res
 uv sync                       # create the venv + install deps (Python 3.12 auto-provisioned)
 cp .env.example .env          # optional: tweak postcode, rates, flags
 uv run vehicle-search init-db # create the SQLite schema (data/vehicles.db)
+
+# Only if you want the bmw.de source (Playwright browser, ~1x one-time download):
+uv run playwright install chromium
+```
+
+### bmw.de note
+
+bmw.de is **enabled** but **off at runtime unless `VF_BMWDE_ENABLED=true`** (it drives a
+real browser). Its results come from BMW's STOLO API (`stolo-data-service…/vehiclesearch/`)
+behind a cookie-consent overlay; the adapter accepts consent, scrolls to lazy-load, and
+**dumps raw captures to `data/raw/bmwde_last_capture.json`** so you can validate the exact
+offer field names on your first successful run. Run it on an NL network:
+
+```bash
+VF_BMWDE_ENABLED=true uv run vehicle-search fetch --source bmw-de --search x5-g05
 ```
 
 ## Usage
