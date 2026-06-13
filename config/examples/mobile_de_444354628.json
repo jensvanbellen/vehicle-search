@@ -1,0 +1,22 @@
+{
+  "//": "mobile.de manual entry (listing pages are robots-disallowed, so NOT auto-fetched). Fill the fields from the page you're viewing, then: uv run vehicle-search add-manual --file config/examples/mobile_de_444354628.json",
+  "title": "BMW X5 ... (copy the listing title)",
+  "vehicle_type": "car",
+  "source": "mobile-de",
+  "url": "https://suchen.mobile.de/fahrzeuge/details.html?id=444354628",
+  "make": "BMW",
+  "model": "X5",
+  "variant": "xDrive30d",
+  "model_year": null,
+  "mileage_km": null,
+  "price": null,
+  "country": "DE",
+  "seller_type": "dealer",
+  "seller_name": null,
+  "location": null,
+  "power_hp": null,
+  "colour": null,
+  "fuel_type": "Diesel",
+  "transmission": "Automaat",
+  "options": "paste the equipment/options text here so they get normalized & scored"
+}

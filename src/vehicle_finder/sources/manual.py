@@ -57,15 +57,24 @@ class ManualListingInput(BaseModel):
     image_urls: list[str] = []
 
 
+_GENERIC_PATH_TAILS = {"", "details.html", "index.html", "details"}
+
+
 def _stable_id(data: ManualListingInput) -> str:
     if data.url:
-        tail = urllib.parse.urlsplit(data.url).path.rstrip("/").rsplit("/", 1)[-1]
-        if tail:
+        parts = urllib.parse.urlsplit(data.url)
+        query = urllib.parse.parse_qs(parts.query)
+        # Many sites carry the listing id in the query (mobile.de ?id=, etc.).
+        for key in ("id", "adId", "itemId"):
+            if query.get(key):
+                return query[key][0]
+        tail = parts.path.rstrip("/").rsplit("/", 1)[-1]
+        if tail and tail not in _GENERIC_PATH_TAILS:
             return tail
-    key = "|".join(
+    composite = "|".join(
         str(x) for x in (data.title, data.make, data.model, data.model_year, data.mileage_km)
     )
-    return "manual-" + hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
+    return "manual-" + hashlib.sha1(composite.encode("utf-8")).hexdigest()[:12]
 
 
 def build_manual_listing(data: ManualListingInput) -> VehicleListing:

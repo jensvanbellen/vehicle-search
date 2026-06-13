@@ -47,8 +47,16 @@ def test_stable_id_is_deterministic() -> None:
 
 
 def test_url_derived_id() -> None:
-    data = ManualListingInput(
-        title="BMW X5", url="https://suchen.mobile.de/fahrzeuge/details.html/xyz-987"
-    )
+    data = ManualListingInput(title="BMW X5", url="https://www.example.com/listing/xyz-987")
     listing = build_manual_listing(data)
     assert listing.source_listing_id == "xyz-987"
+
+
+def test_query_param_id_preferred() -> None:
+    # mobile.de keeps the id in the query, and the path tail is generic ("details.html").
+    data = ManualListingInput(
+        title="BMW X5",
+        url="https://suchen.mobile.de/fahrzeuge/details.html?id=444354628&action=parkItem",
+    )
+    listing = build_manual_listing(data)
+    assert listing.source_listing_id == "444354628"
