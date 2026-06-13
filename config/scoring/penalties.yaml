@@ -1,0 +1,26 @@
+# Aesthetic / character penalties — subtract points for the "cosmetically sporty,
+# all-black, oversized-wheel" traits the X5 brief asks to penalize (not reject).
+# Detected from the listing text (title + description + options), NL/DE/EN. Tune freely.
+#
+# NOTE: M Sport itself is intentionally NOT penalised (the brief: don't reward it, but
+# don't reject a good car for it). Only the aggressive cosmetic add-ons are penalised.
+penalties:
+  large_wheels:
+    label: 'Large wheels (21"+)'
+    aliases: ['21 inch', '22 inch', '23 inch', '21 zoll', '22 zoll', '23 zoll', '21"', '22"', '23"', '21 inch velgen', '21 duim', '22 duim']
+    points: -6
+
+  shadow_line_blackout:
+    label: "All-black / Shadow Line styling"
+    aliases: ["shadow-line", "shadow line", "blackout", "black optic", "schwarz optik", "high-gloss shadow", "hochglanz shadow"]
+    points: -4
+
+  m_aero_carbon:
+    label: "Aggressive M aero / carbon styling"
+    aliases: ["m aerodynamik", "m aerodynamics", "aerodynamikpaket", "m carbon", "carbon spiegel", "m performance aero"]
+    points: -3
+
+  lowered_suspension:
+    label: "Lowered suspension"
+    aliases: ["verlaagd", "tieferlegung", "lowered", "h&r veren", "lowering springs"]
+    points: -5

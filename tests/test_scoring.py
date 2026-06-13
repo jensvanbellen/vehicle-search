@@ -78,6 +78,20 @@ def test_rare_option_shows_frequency() -> None:
     assert "25% of matches" in rare_lines[0].label
 
 
+def test_sporty_spec_is_penalised() -> None:
+    sporty = _car("sporty", 50000, 100000, 2021, ["panoramic_roof"])
+    sporty.raw_options_text = "M Aerodynamikpaket, 22 inch velgen, Shadow Line hochglanz"
+    plain = _car("plain", 50000, 100000, 2021, ["panoramic_roof"])
+    results = Scorer().compute_scores([sporty, plain], TARGET, reference_year=2026)
+    sporty_penalties = [
+        line for line in results[0].lines if line.points < 0 and "wheel" in line.label.lower()
+    ]
+    assert sporty_penalties  # large-wheels penalty fired
+    assert any("Shadow Line" in line.label for line in results[0].lines)
+    # Same equipment, but the sporty car scores lower thanks to the character penalties.
+    assert results[0].total < results[1].total
+
+
 def test_cheaper_listing_gets_price_bonus() -> None:
     cheap = _car("cheap", 40000, 100000, 2021, ["panoramic_roof"])
     dear = _car("dear", 60000, 100000, 2021, ["panoramic_roof"])

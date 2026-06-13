@@ -192,6 +192,7 @@ def build_representative(members: list[VehicleListing]) -> VehicleListing:
         distance_km=min(distances) if distances else base.distance_km,
         warranty=base.warranty,
         description=base.description,
+        raw_options_text=base.raw_options_text,  # so character penalties see the options text
         image_urls=list(base.image_urls),
         search_id=base.search_id,
     )

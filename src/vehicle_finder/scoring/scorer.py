@@ -8,15 +8,42 @@ how rare a feature is in the current result set.
 
 from __future__ import annotations
 
+import functools
+import re
 import statistics
 from dataclasses import dataclass
 from datetime import date
-from typing import Any
+from typing import Any, cast
 
 from vehicle_finder.configio import SearchTarget, load_yaml_mapping
 from vehicle_finder.models.enums import VehicleType
 from vehicle_finder.models.listing import VehicleListing
 from vehicle_finder.normalize.equipment import FeatureCatalog, get_catalog
+
+
+@functools.lru_cache(maxsize=1)
+def _penalty_patterns() -> list[tuple[re.Pattern[str], str, float]]:
+    """Compiled (pattern, label, points) for aesthetic/character penalties (config-driven)."""
+    raw = load_yaml_mapping("scoring/penalties.yaml").get("penalties")
+    out: list[tuple[re.Pattern[str], str, float]] = []
+    if not isinstance(raw, dict):
+        return out
+    for key, entry in cast("dict[str, Any]", raw).items():
+        if not isinstance(entry, dict):
+            continue
+        entry_d = cast("dict[str, Any]", entry)
+        label = str(entry_d.get("label", key))
+        points = float(entry_d.get("points", 0.0) or 0.0)
+        aliases = entry_d.get("aliases")
+        if isinstance(aliases, list):
+            for alias in cast("list[Any]", aliases):
+                pattern = re.compile(rf"(?<!\w){re.escape(str(alias))}(?!\w)", re.IGNORECASE)
+                out.append((pattern, label, points))
+    return out
+
+
+def clear_penalty_cache() -> None:
+    _penalty_patterns.cache_clear()
 
 
 @dataclass
@@ -205,6 +232,16 @@ class Scorer:
         )
         if present >= 4:
             lines.append(ScoreLine("Listing complete", float(w.get("completeness_bonus", 5))))
+
+        # Character/aesthetic penalties (big wheels, all-black/Shadow Line, M aero, lowered).
+        text = " ".join(
+            p for p in (listing.title, listing.description, listing.raw_options_text) if p
+        )
+        seen: set[str] = set()
+        for pattern, label, points in _penalty_patterns():
+            if label not in seen and pattern.search(text):
+                seen.add(label)
+                lines.append(ScoreLine(label, points))
 
         total = round(sum(ln.points for ln in lines), 1)
         return ScoreResult(total=total, lines=lines)
