@@ -36,7 +36,12 @@
 <body>
   <header>
     <h1><a href="/">🚗 Vehicle Finder</a></h1>
-    <span class="muted">{% block subtitle %}local used car &amp; motorcycle finder{% endblock %}</span>
+    <nav style="display:flex;gap:14px;font-size:13px">
+      <a href="/">Dashboard</a>
+      <a href="/listings">Listings</a>
+      <a href="/diagnostics">Diagnostics</a>
+    </nav>
+    <span class="muted" style="margin-left:auto">{% block subtitle %}local used car &amp; motorcycle finder{% endblock %}</span>
   </header>
   <main>{% block content %}{% endblock %}</main>
 </body>

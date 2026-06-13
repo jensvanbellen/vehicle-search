@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block subtitle %}compare{% endblock %}
+{% block content %}
+<h2>Compare vehicles</h2>
+{% if not vehicles %}
+<p class="muted">Add group ids to compare, e.g. <code>/compare?ids=grp-aaa,grp-bbb</code>.</p>
+{% else %}
+<table>
+  <thead><tr><th>Field</th>{% for v in vehicles %}<th>{{ v.make }} {{ v.model }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    <tr><td class="muted">Year</td>{% for v in vehicles %}<td class="num">{{ v.model_year or '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Price</td>{% for v in vehicles %}<td class="num">{{ '€{:,}'.format(v.price) if v.price else '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Spread</td>{% for v in vehicles %}<td class="num">{{ '€{:,}'.format(v.price_spread) if v.price_spread else '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Platforms</td>{% for v in vehicles %}<td class="num">{{ v.member_count }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Country</td>{% for v in vehicles %}<td>{{ v.country or '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Distance</td>{% for v in vehicles %}<td class="num">{{ '%.0f km'|format(v.distance_km) if v.distance_km is not none else '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Score</td>{% for v in vehicles %}<td class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</td>{% endfor %}</tr>
+    <tr><td class="muted">Equipment</td>{% for v in vehicles %}<td class="chips">{% for f in v.features %}<span>{{ f.label }}</span>{% endfor %}</td>{% endfor %}</tr>
+    <tr><td></td>{% for v in vehicles %}<td><a href="/group/{{ v.group_id }}">detail →</a></td>{% endfor %}</tr>
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

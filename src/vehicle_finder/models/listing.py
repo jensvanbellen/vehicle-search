@@ -25,7 +25,9 @@ from vehicle_finder.models.values import DataQuality, FeatureMatch
 
 
 def utcnow() -> datetime:
-    return datetime.now(UTC)
+    # Naive UTC: SQLite stores datetimes without tzinfo, so keeping everything naive-UTC
+    # avoids "can't compare offset-naive and offset-aware" errors after a DB round-trip.
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class VehicleListing(SQLModel, table=True):

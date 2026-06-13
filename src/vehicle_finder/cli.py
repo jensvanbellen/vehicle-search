@@ -100,6 +100,23 @@ def diagnostics() -> None:
     typer.echo(render_diagnostics())
 
 
+@app.command()
+def notify() -> None:
+    """Build the highlights digest (best matches, price drops, shortlist) and send it.
+
+    Prints to the console only; nothing leaves the machine unless a real channel is
+    configured (VF_NOTIFY_ENABLED + a future email/ntfy backend).
+    """
+    _boot()
+    from vehicle_finder.notify.base import Notification, get_notifier
+    from vehicle_finder.notify.digest import build_digest
+    from vehicle_finder.persistence.db import session_scope
+
+    with session_scope() as session:
+        body = build_digest(session)
+    get_notifier().send(Notification(title="Vehicle Finder digest", body=body))
+
+
 @app.command(name="init-db")
 def init_db() -> None:
     """Create the SQLite schema if it does not exist."""

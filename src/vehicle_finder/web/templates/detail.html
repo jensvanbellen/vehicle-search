@@ -1,74 +1,102 @@
 {% extends "base.html" %}
-{% block title %}{{ v.title }} — Vehicle Finder{% endblock %}
-{% block subtitle %}<a href="/">← back to listings</a>{% endblock %}
+{% block title %}{{ v.make }} {{ v.model }} — Vehicle Finder{% endblock %}
+{% block subtitle %}<a href="/listings">← back</a>{% endblock %}
 {% block content %}
-<h2 style="margin:0 0 4px">{{ v.title }} <span class="badge">{{ v.source }}</span></h2>
-<p class="muted">{{ v.variant or '' }} · {{ v.model_year or '?' }} · score
-  <strong class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</strong>
-  · <a href="{{ v.url }}" target="_blank" rel="noopener">open original listing ↗</a></p>
+<h2 style="margin:0 0 4px">{{ v.make }} {{ v.model }} {{ v.model_year or '' }}
+  {% if v.member_count > 1 %}<span class="badge" style="color:var(--accent)">seen on {{ v.member_count }} platforms</span>{% endif %}
+</h2>
+<p class="muted">{{ v.vehicle_type }} · score <strong class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</strong>
+  · representative price <strong>{{ '€{:,}'.format(v.price) if v.price else '—' }}</strong>
+  {% if v.price_spread %}· spread €{{ '{:,}'.format(v.price_spread) }} (€{{ '{:,}'.format(v.price_min) }}–€{{ '{:,}'.format(v.price_max) }}){% endif %}</p>
 
 {% if v.images %}
-<div class="gallery card">{% for img in v.images[:8] %}<img src="{{ img }}" alt="" loading="lazy"/>{% endfor %}</div>
+<div class="gallery card">{% for img in v.images %}<img src="{{ img }}" alt="" loading="lazy"/>{% endfor %}</div>
+{% endif %}
+
+{% if v.merge_explanation %}
+<div class="card" style="border-color:var(--accent)">
+  <h3>Why these are grouped</h3>
+  <ul>{% for line in v.merge_explanation %}<li>{{ line }}</li>{% endfor %}</ul>
+</div>
 {% endif %}
 
 <div class="card">
-  <h3>Specifications</h3>
-  <div class="grid">
-    <div><b>Price</b>{{ '€{:,}'.format(v.price) if v.price else '—' }}</div>
-    <div><b>Mileage</b>{{ '{:,} km'.format(v.mileage_km) if v.mileage_km else '—' }}</div>
-    <div><b>Registration</b>{{ v.registration_date or '—' }}</div>
-    <div><b>Power</b>{{ (v.power_hp ~ ' hp') if v.power_hp else '—' }}</div>
-    <div><b>Displacement</b>{{ (v.displacement_cc ~ ' cc') if v.displacement_cc else '—' }}</div>
-    <div><b>Fuel</b>{{ v.fuel_type or '—' }}</div>
-    <div><b>Transmission</b>{{ v.transmission or '—' }}</div>
-    <div><b>Body</b>{{ v.body_style or '—' }}</div>
-    <div><b>Colour</b>{{ v.colour or '—' }}</div>
-    <div><b>Country</b>{{ v.country or '—' }}</div>
-    <div><b>Distance</b>{{ '%.0f km (straight-line)'|format(v.distance_km) if v.distance_km is not none else '—' }}</div>
-    <div><b>Seller</b>{{ v.seller_name or '—' }} ({{ v.seller_type }})</div>
-    <div><b>Warranty</b>{{ v.warranty or '—' }}</div>
-    <div><b>Kenteken</b>{{ v.kenteken or '—' }}</div>
-    <div><b>VIN</b>{{ v.vin or '—' }}</div>
-  </div>
+  <h3>Per-source listings &amp; prices</h3>
+  <table>
+    <thead><tr><th>Source</th><th>Price</th><th>Mileage</th><th>Seller</th><th>Country</th><th>Kenteken</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for m in v.members %}
+      <tr>
+        <td><span class="badge">{{ m.source }}</span></td>
+        <td class="num">{{ '€{:,}'.format(m.price) if m.price else '—' }}</td>
+        <td class="num">{{ '{:,} km'.format(m.mileage_km) if m.mileage_km else '—' }}</td>
+        <td>{{ m.seller_name or '—' }}</td>
+        <td>{{ m.country or '—' }}</td>
+        <td>{{ m.kenteken or '—' }}</td>
+        <td>{{ m.status }}</td>
+        <td><a href="{{ m.url }}" target="_blank" rel="noopener">open ↗</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 <div class="card">
   <h3>Score breakdown</h3>
   <table>
     {% for line in v.score_breakdown %}
-    <tr><td>{{ line.label }}</td>
-        <td class="num {{ 'pos' if line.points >= 0 else 'neg' }}">{{ '%+.1f'|format(line.points) }}</td></tr>
+    <tr><td>{{ line.label }}</td><td class="num {{ 'pos' if line.points >= 0 else 'neg' }}">{{ '%+.1f'|format(line.points) }}</td></tr>
     {% endfor %}
     <tr><td><strong>Total</strong></td><td class="num score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</td></tr>
   </table>
+  {% if v.country == 'DE' %}<p class="muted">German listing — see import-cost estimate (separate, placeholder module).</p>{% endif %}
 </div>
 
 <div class="card">
   <h3>Equipment</h3>
-  <p class="chips">{% for f in v.scored_features %}<span>{{ f }}</span>{% else %}<span class="muted">none detected</span>{% endfor %}</p>
-  {% if v.low_conf_features %}
-  <p class="muted">Possibly equipped (low confidence): {{ v.low_conf_features | join(', ') }}</p>
-  {% endif %}
+  <table>
+    {% for f in v.features %}
+    <tr><td>{{ f.label }}</td>
+        <td class="muted">{{ f.confidence }}{% if f.confidence != 'high' %} (possibly equipped){% endif %}</td>
+        <td class="muted">{{ f.sources | join(', ') }}</td></tr>
+    {% else %}<tr><td class="muted">none detected</td></tr>{% endfor %}
+  </table>
 </div>
 
-{% if v.price_history and v.price_history|length > 1 %}
+{% if v.price_history %}
 <div class="card">
-  <h3>Price history</h3>
+  <h3>Combined price history (across sources)</h3>
   <table>
     {% for h in v.price_history %}
-    <tr><td>{{ h.observed_at }}</td><td class="num">{{ '€{:,}'.format(h.price) if h.price else '—' }}</td></tr>
+    <tr><td>{{ h.observed_at }}</td><td><span class="badge">{{ h.source }}</span></td>
+        <td class="num">{{ '€{:,}'.format(h.price) if h.price else '—' }}</td></tr>
     {% endfor %}
   </table>
 </div>
 {% endif %}
 
-{% if v.data_quality %}
-<div class="card"><h3 class="warn">Data-quality warnings</h3>
-  <ul>{% for w in v.data_quality %}<li class="warn">{{ w }}</li>{% endfor %}</ul>
+<div class="card">
+  <h3>Your notes &amp; status</h3>
+  <form method="post" action="/group/{{ v.group_id }}/shortlist" style="display:inline">
+    <input type="hidden" name="value" value="{{ 'false' if v.shortlisted else 'true' }}" />
+    <button type="submit">{{ '★ Shortlisted (remove)' if v.shortlisted else '☆ Shortlist' }}</button>
+  </form>
+  <form method="post" action="/group/{{ v.group_id }}/reject" style="display:inline">
+    <input type="hidden" name="value" value="{{ 'false' if v.rejected else 'true' }}" />
+    <input type="text" name="reason" placeholder="reason" value="{{ v.reject_reason or '' }}" />
+    <button type="submit">{{ 'Un-reject' if v.rejected else 'Reject' }}</button>
+  </form>
+  <form method="post" action="/group/{{ v.group_id }}/notes" style="margin-top:10px">
+    <textarea name="notes" rows="3" style="width:100%;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:7px;padding:8px" placeholder="personal notes…">{{ v.notes or '' }}</textarea>
+    <button type="submit">Save notes</button>
+  </form>
 </div>
-{% endif %}
 
-{% if v.description %}
-<div class="card"><h3>Original description</h3><p class="muted">{{ v.description }}</p></div>
+{% set warns = [] %}
+{% for m in v.members %}{% for w in m.data_quality %}{% if warns.append((m.source, w)) %}{% endif %}{% endfor %}{% endfor %}
+{% if warns %}
+<div class="card"><h3 class="warn">Data-quality warnings</h3>
+  <ul>{% for src, w in warns %}<li class="warn">{{ src }}: {{ w }}</li>{% endfor %}</ul>
+</div>
 {% endif %}
 {% endblock %}

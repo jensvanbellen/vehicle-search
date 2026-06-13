@@ -1,48 +1,53 @@
 {% extends "base.html" %}
-{% block subtitle %}{{ count }} active vehicle{{ '' if count == 1 else 's' }}{% endblock %}
+{% block subtitle %}{{ count }} consolidated vehicle{{ '' if count == 1 else 's' }}{% endblock %}
 {% block content %}
 <form class="filters" method="get">
-  <input type="search" name="q" value="{{ q }}" placeholder="Search title / description…" />
+  <input type="search" name="q" value="{{ q }}" placeholder="Search make / model…" />
   <select name="source">
     <option value="">All sources</option>
     {% for s in sources %}<option value="{{ s }}" {{ 'selected' if s == source else '' }}>{{ s }}</option>{% endfor %}
   </select>
+  <select name="vtype">
+    <option value="">All types</option>
+    <option value="car" {{ 'selected' if vtype == 'car' else '' }}>Cars</option>
+    <option value="motorcycle" {{ 'selected' if vtype == 'motorcycle' else '' }}>Motorcycles</option>
+  </select>
   <select name="sort">
-    {% for key in ['score','price','mileage','year'] %}
+    {% for key in ['score','price','year','distance'] %}
     <option value="{{ key }}" {{ 'selected' if key == sort else '' }}>Sort: {{ key }}</option>
     {% endfor %}
   </select>
+  <label class="muted"><input type="checkbox" name="show_rejected" value="true" {{ 'checked' if show_rejected else '' }} onchange="this.form.submit()" /> show rejected</label>
   <button type="submit">Apply</button>
-  <span class="muted">{{ count }} result{{ '' if count == 1 else 's' }}</span>
 </form>
 
 <table>
   <thead>
-    <tr>
-      <th></th><th>Vehicle</th><th>Year</th><th>Mileage</th><th>Price</th>
-      <th>Country</th><th>Seller</th><th>Distance</th><th>Equipment</th><th>Score</th>
-    </tr>
+    <tr><th></th><th>Vehicle</th><th>Year</th><th>Price</th><th>Spread</th><th>Platforms</th>
+        <th>Country</th><th>Distance</th><th>Equipment</th><th>Score</th></tr>
   </thead>
   <tbody>
-    {% for v in listings %}
-    <tr>
+    {% for v in groups %}
+    <tr {{ 'style=opacity:.55' if v.rejected else '' }}>
       <td>{% if v.image %}<img class="thumb" src="{{ v.image }}" alt="" loading="lazy" />{% endif %}</td>
       <td>
-        <a href="/listing/{{ v.id }}"><strong>{{ v.title }}</strong></a><br/>
-        <span class="muted">{{ v.variant or '' }}</span>
-        <span class="badge">{{ v.source }}</span>
+        <a href="/group/{{ v.group_id }}"><strong>{{ v.make }} {{ v.model }}</strong></a>
+        {% if v.is_new %}<span class="badge" style="color:var(--good)">new</span>{% endif %}
+        {% if v.shortlisted %}★{% endif %}<br/>
+        {% for s in v.sources %}<span class="badge">{{ s }}</span>{% endfor %}
+        {% if v.member_count > 1 %}<span class="badge" style="color:var(--accent)">seen on {{ v.member_count }}</span>{% endif %}
       </td>
       <td class="num">{{ v.model_year or '—' }}</td>
-      <td class="num">{{ '{:,}'.format(v.mileage_km) ~ ' km' if v.mileage_km else '—' }}</td>
       <td class="num">{{ '€{:,}'.format(v.price) if v.price else '—' }}</td>
+      <td class="num">{{ '€{:,}'.format(v.price_spread) if v.price_spread else '—' }}</td>
+      <td class="num">{{ v.member_count }}</td>
       <td>{{ v.country or '—' }}</td>
-      <td>{{ v.seller_name or '—' }}</td>
       <td class="num">{{ '%.0f km'|format(v.distance_km) if v.distance_km is not none else '—' }}</td>
-      <td class="chips">{% for f in v.scored_features[:4] %}<span>{{ f }}</span>{% endfor %}</td>
+      <td class="chips">{% for f in v.features[:4] %}<span>{{ f }}</span>{% endfor %}</td>
       <td class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-{% if not listings %}<p class="muted">No listings yet. Run <code>uv run vehicle-search fetch</code>.</p>{% endif %}
+{% if not groups %}<p class="muted">No vehicles. Run <code>uv run vehicle-search fetch</code>.</p>{% endif %}
 {% endblock %}

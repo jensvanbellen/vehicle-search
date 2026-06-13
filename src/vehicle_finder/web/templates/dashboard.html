@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block subtitle %}dashboard{% endblock %}
+{% block content %}
+<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px">
+  <div class="card" style="flex:1;min-width:150px"><b class="muted">Consolidated vehicles</b><div style="font-size:26px">{{ d.group_count }}</div></div>
+  <div class="card" style="flex:1;min-width:150px"><b class="muted">Source listings</b><div style="font-size:26px">{{ d.active_listings }}</div></div>
+  <div class="card" style="flex:1;min-width:150px"><b class="muted">New (24h)</b><div style="font-size:26px">{{ d.new_count }}</div></div>
+  <div class="card" style="flex:1;min-width:150px"><b class="muted">Merged (multi-platform)</b><div style="font-size:26px">{{ d.merged_count }}</div></div>
+</div>
+<p class="muted">Last fetch: {{ d.last_run or 'never' }}</p>
+
+<div class="card">
+  <h3>Best current matches</h3>
+  <table>
+    <thead><tr><th>Vehicle</th><th>Year</th><th>Price</th><th>Platforms</th><th>Score</th></tr></thead>
+    <tbody>
+      {% for g in d.best %}
+      <tr>
+        <td><a href="/group/{{ g.group_id }}">{{ g.make }} {{ g.model }}</a></td>
+        <td class="num">{{ g.model_year or '—' }}</td>
+        <td class="num">{{ '€{:,}'.format(g.price) if g.price else '—' }}</td>
+        <td class="num">{{ g.member_count }}</td>
+        <td class="score">{{ '%.1f'|format(g.score) if g.score is not none else '—' }}</td>
+      </tr>
+      {% else %}<tr><td colspan="5" class="muted">No vehicles yet — run <code>uv run vehicle-search fetch</code>.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+  <p><a href="/listings">View all listings →</a></p>
+</div>
+
+<div class="card">
+  <h3>Source health</h3>
+  <table>
+    <thead><tr><th>Source</th><th>Status</th><th>Last success</th><th>Found</th><th>Failures</th></tr></thead>
+    <tbody>
+      {% for r in diagnostics %}
+      <tr>
+        <td>{{ r.source }} <span class="muted">{{ '' if r.enabled else '(off)' }}</span></td>
+        <td>{{ r.status }}</td>
+        <td class="muted">{{ r.last_success or '—' }}</td>
+        <td class="num">{{ r.found }}</td>
+        <td class="num">{{ r.parse_failures }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

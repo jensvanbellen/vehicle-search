@@ -20,7 +20,7 @@ from vehicle_finder.dedup.matcher import MatchVerdict, compute_match, get_dedup_
 from vehicle_finder.logging import get_logger
 from vehicle_finder.models.enums import ListingStatus
 from vehicle_finder.models.group import MergeDecision, VehicleGroup
-from vehicle_finder.models.listing import VehicleListing, utcnow
+from vehicle_finder.models.listing import VehicleListing
 from vehicle_finder.models.values import FeatureMatch
 from vehicle_finder.scoring.scorer import Scorer
 
@@ -249,10 +249,12 @@ def regroup(session: Session, *, score: bool = True) -> int:
         session.delete(existing)
     session.flush()
 
-    now = utcnow()
     for gid, members in members_by_gid.items():
         prices = [m.price for m in members if m.price]
         sources = sorted({m.source for m in members})
+        # Derive timestamps from members so "new since" survives regrouping.
+        first_seen = min(m.first_seen for m in members)
+        last_seen = max(m.last_seen for m in members)
         base = build_representative(members)
         explanation = outcome.reasons_of.get(gid, [])
         if len(members) > 1 and explanation:
@@ -276,8 +278,8 @@ def regroup(session: Session, *, score: bool = True) -> int:
                 score=score_total,
                 score_breakdown=breakdown,
                 merge_explanation=explanation,
-                first_seen=now,
-                last_seen=now,
+                first_seen=first_seen,
+                last_seen=last_seen,
             )
         )
     log.info("regrouped", listings=len(listings), groups=len(members_by_gid))

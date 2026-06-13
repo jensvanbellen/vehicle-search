@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block subtitle %}source diagnostics{% endblock %}
+{% block content %}
+<h2>Source diagnostics</h2>
+<table>
+  <thead><tr><th>Source</th><th>Adapter</th><th>Enabled</th><th>Status</th><th>Last attempt</th>
+      <th>Last success</th><th>Found</th><th>Parsed</th><th>Failures</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td><strong>{{ r.source }}</strong></td>
+      <td class="muted">{{ r.adapter or '—' }}</td>
+      <td>{{ 'yes' if r.enabled else 'no' }}</td>
+      <td>{% if r.status == 'ok' %}<span class="pos">{{ r.status }}</span>{% elif r.status in ('error','layout changed?') %}<span class="neg">{{ r.status }}</span>{% else %}{{ r.status }}{% endif %}</td>
+      <td class="muted">{{ r.last_attempt or '—' }}</td>
+      <td class="muted">{{ r.last_success or '—' }}</td>
+      <td class="num">{{ r.found }}</td>
+      <td class="num">{{ r.parsed }}</td>
+      <td class="num">{{ r.parse_failures }}</td>
+    </tr>
+    {% if r.warnings %}
+    <tr><td></td><td colspan="8" class="muted">{% for w in r.warnings %}⚠ {{ w }}<br/>{% endfor %}</td></tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+<p class="muted">Sources marked <em>unverified in build env</em> (e.g. bmw-de) need a live run on your own network.</p>
+{% endblock %}
