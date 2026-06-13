@@ -1,0 +1,25 @@
+# Cross-platform duplicate-merging signals & thresholds. Conservative by default:
+# bias toward NOT merging when uncertain (a false merge hides a different vehicle).
+#
+# A pair's confidence is the sum of the weights of the signals that fire (capped at 1.0).
+# Matching VIN or kenteken is DECISIVE (forces a merge regardless of weights).
+
+mileage_tolerance_km: 200          # mileage equal within this => "mileage" signal
+description_similarity_threshold: 82   # rapidfuzz token_set_ratio (0-100)
+phash_max_hamming: 8               # two images within this Hamming distance = near-identical
+phash_min_matches: 2               # >= N near-identical images => "photos" signal
+power_tolerance_hp: 5
+price_proximity_pct: 5             # prices within this % => weak "price" signal
+
+merge_threshold: 0.75              # >= => merge into one group
+possible_duplicate_threshold: 0.55 # [possible, merge) => linked & flagged, NOT auto-merged
+
+weights:
+  mileage: 0.30        # strong
+  registration: 0.25   # strong (same first-registration month/year)
+  dealer: 0.20         # strong (same dealer = classic cross-post)
+  photos: 0.45         # very strong (dealers reuse the exact photos)
+  variant_power: 0.15  # medium
+  description: 0.15    # medium
+  colour: 0.05         # weak
+  price: 0.05          # weak (asking prices differ across platforms)

@@ -11,6 +11,7 @@ from vehicle_finder.models.enums import (
     Transmission,
     VehicleType,
 )
+from vehicle_finder.models.group import MergeDecision, VehicleGroup
 from vehicle_finder.models.history import PriceObservation, SourceRun
 from vehicle_finder.models.listing import VehicleListing, utcnow
 from vehicle_finder.models.values import DataQuality, FeatureMatch
@@ -22,10 +23,12 @@ __all__ = [
     "FeatureMatch",
     "FuelType",
     "ListingStatus",
+    "MergeDecision",
     "PriceObservation",
     "SellerType",
     "SourceRun",
     "Transmission",
+    "VehicleGroup",
     "VehicleListing",
     "VehicleType",
     "utcnow",

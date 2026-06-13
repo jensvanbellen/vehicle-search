@@ -51,6 +51,7 @@ _SYNC_FIELDS = (
     "raw_options_text",
     "features",
     "image_urls",
+    "image_phashes",
     "data_quality",
     "score",
     "score_breakdown",

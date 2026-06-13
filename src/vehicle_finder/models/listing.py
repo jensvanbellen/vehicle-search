@@ -82,6 +82,7 @@ class VehicleListing(SQLModel, table=True):
     # --- JSON-backed ---
     features: list[dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
     image_urls: list[str] = Field(default_factory=list, sa_column=Column(JSON))
+    image_phashes: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     data_quality: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     raw_payload: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     score_breakdown: list[dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))

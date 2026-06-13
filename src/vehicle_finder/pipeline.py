@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 
 from vehicle_finder.config import get_settings
 from vehicle_finder.configio import get_search, load_searches, load_sources
+from vehicle_finder.dedup.cluster import regroup
 from vehicle_finder.distance import distance_from_home_km
 from vehicle_finder.logging import get_logger
 from vehicle_finder.models.history import SourceRun
@@ -19,7 +20,6 @@ from vehicle_finder.models.listing import VehicleListing, utcnow
 from vehicle_finder.persistence.db import session_scope
 from vehicle_finder.persistence.repository import (
     UpsertOutcome,
-    count_active_listings,
     mark_stale_inactive,
     upsert_listing,
 )
@@ -63,7 +63,7 @@ class RunSummary:
                     f"price_changes={s.price_changes} removed={s.removed} "
                     f"parse_failures={s.parse_failures}"
                 )
-        lines.append(f"Active listings: {self.groups_total}")
+        lines.append(f"Consolidated vehicles: {self.groups_total}")
         return "\n".join(lines)
 
 
@@ -153,7 +153,9 @@ def run_fetch(
                     )
                 for audit in audits:
                     session.add(audit)
-                summary.groups_total = count_active_listings(session)
+                session.flush()
+                # Recompute cross-platform groups (manual decisions sticky) + group scores.
+                summary.groups_total = regroup(session)
     finally:
         client.close()
 
