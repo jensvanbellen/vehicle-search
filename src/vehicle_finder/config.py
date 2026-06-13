@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     bmwde_enabled: bool = Field(default=False)
     playwright_headless: bool = Field(default=False)
 
+    # RDW (Dutch vehicle registry) open-data enrichment for NL-plated listings. Free + official.
+    rdw_enabled: bool = Field(default=True)
+
     # Notifications — never send unless explicitly enabled.
     notify_enabled: bool = Field(default=False)
 

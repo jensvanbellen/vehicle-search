@@ -11,13 +11,29 @@ from typing import Any
 
 from sqlmodel import Session, col, desc, select
 
+from vehicle_finder.configio import get_search
 from vehicle_finder.models.enums import ListingStatus
 from vehicle_finder.models.group import VehicleGroup
 from vehicle_finder.models.history import PriceObservation, SourceRun
 from vehicle_finder.models.listing import VehicleListing, utcnow
 from vehicle_finder.models.userstate import UserVehicleState
+from vehicle_finder.normalize.lci import LciStatus, lci_status
+from vehicle_finder.scoring.import_cost import estimate_import_cost
 
 _NEW_WINDOW = timedelta(hours=24)
+
+
+def _lci_for(members: list[VehicleListing]) -> LciStatus:
+    if not members:
+        return LciStatus("unknown", "none")
+    member = next((m for m in members if m.build_date), members[0])
+    generation = None
+    if member.search_id:
+        target = get_search(member.search_id)
+        generation = target.variant_generation if target else None
+    return lci_status(
+        member.make, member.model, generation, member.build_date, member.registration_date
+    )
 
 
 def _members(session: Session, group_id: str) -> list[VehicleListing]:
@@ -69,6 +85,8 @@ def group_to_view(
         "image": _first_image(members),
         "features": _union_features(members)[:5],
         "is_new": group.first_seen >= utcnow() - _NEW_WINDOW,
+        "lci": _lci_for(members).label,
+        "rdw_verified": any(m.rdw for m in members),
         "shortlisted": bool(state and state.shortlisted),
         "rejected": bool(state and state.rejected),
     }
@@ -141,6 +159,24 @@ def group_detail_view(session: Session, group_id: str) -> dict[str, Any] | None:
             if url not in images:
                 images.append(url)
 
+    lci = _lci_for(members)
+    rdw_member = next((m for m in members if m.rdw), None)
+    de_member = next(
+        (m for m in members if (m.country or "").upper() == "DE" and m.price), None
+    ) or next((m for m in members if (m.country or "").upper() == "DE"), None)
+    estimate = estimate_import_cost(de_member) if de_member else None
+    import_cost = (
+        {
+            "line_items": estimate.line_items,
+            "added_total": estimate.added_total,
+            "asking_price": estimate.asking_price,
+            "all_in_price": estimate.all_in_price,
+            "disclaimer": estimate.disclaimer,
+        }
+        if estimate
+        else None
+    )
+
     return {
         "group_id": group.group_id,
         "make": group.make,
@@ -161,6 +197,9 @@ def group_detail_view(session: Session, group_id: str) -> dict[str, Any] | None:
         "features": list(feature_rows.values()),
         "images": images[:10],
         "price_history": _combined_price_history(session, members),
+        "lci": {"label": lci.label, "confidence": lci.confidence},
+        "rdw": rdw_member.rdw if rdw_member else {},
+        "import_cost": import_cost,
         "shortlisted": bool(state and state.shortlisted),
         "rejected": bool(state and state.rejected),
         "reject_reason": state.reject_reason if state else None,

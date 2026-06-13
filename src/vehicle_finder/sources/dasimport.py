@@ -112,6 +112,7 @@ def parse_card(card: Node, base_url: str, search_id: str | None = None) -> Vehic
         variant=variant,
         model_year=year,
         registration_date=parse_iso_date(build_iso),
+        build_date=parse_iso_date(build_iso),  # dasimport's card date is the build year
         mileage_km=mileage,
         price=price,
         currency="EUR",

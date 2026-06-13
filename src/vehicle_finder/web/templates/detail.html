@@ -3,6 +3,8 @@
 {% block subtitle %}<a href="/listings">← back</a>{% endblock %}
 {% block content %}
 <h2 style="margin:0 0 4px">{{ v.make }} {{ v.model }} {{ v.model_year or '' }}
+  {% if v.lci.label != 'unknown' %}<span class="badge" style="color:{{ 'var(--good)' if v.lci.label == 'pre-LCI' else 'var(--bad)' }}">{{ v.lci.label }}{% if v.lci.confidence == 'low' %} ?{% endif %}</span>{% endif %}
+  {% if v.rdw %}<span class="badge" style="color:var(--good)">RDW-verified</span>{% endif %}
   {% if v.member_count > 1 %}<span class="badge" style="color:var(--accent)">seen on {{ v.member_count }} platforms</span>{% endif %}
 </h2>
 <p class="muted">{{ v.vehicle_type }} · score <strong class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</strong>
@@ -51,6 +53,37 @@
   </table>
   {% if v.country == 'DE' %}<p class="muted">German listing — see import-cost estimate (separate, placeholder module).</p>{% endif %}
 </div>
+
+{% if v.rdw %}
+<div class="card" style="border-color:var(--good)">
+  <h3>RDW official record (verified)</h3>
+  <div class="grid">
+    <div><b>First registration</b>{{ v.rdw.first_admission or '—' }}</div>
+    <div><b>NL registration</b>{{ v.rdw.first_nl_registration or '—' }}</div>
+    <div><b>Odometer judgement</b>
+      <span class="{{ 'neg' if v.rdw.odometer_judgement == 'Onlogisch' else '' }}">{{ v.rdw.odometer_judgement or '—' }}</span></div>
+    <div><b>Registered colour</b>{{ v.rdw.colour or '—' }}</div>
+    <div><b>Catalogue price</b>{{ '€{:,}'.format(v.rdw.catalogue_price) if v.rdw.catalogue_price else '—' }}</div>
+    <div><b>Open recall</b><span class="{{ 'neg' if v.rdw.recall_open else '' }}">{{ 'YES' if v.rdw.recall_open else 'no' }}</span></div>
+    <div><b>APK valid until</b>{{ v.rdw.apk_expiry or '—' }}</div>
+  </div>
+  <p class="muted">Source: RDW open data (opendata.rdw.nl) — official Dutch registry.</p>
+</div>
+{% endif %}
+
+{% if v.import_cost %}
+<div class="card">
+  <h3>German-import cost estimate <span class="muted">(placeholder — not official)</span></h3>
+  <table>
+    <tr><td>Asking price (DE)</td><td class="num">{{ '€{:,}'.format(v.import_cost.asking_price) if v.import_cost.asking_price else '—' }}</td></tr>
+    {% for label, amount in v.import_cost.line_items %}
+    <tr><td>{{ label }}</td><td class="num">+€{{ '{:,}'.format(amount) }}</td></tr>
+    {% endfor %}
+    <tr><td><strong>Estimated all-in NL price</strong></td><td class="num score">{{ '€{:,}'.format(v.import_cost.all_in_price) if v.import_cost.all_in_price else '—' }}</td></tr>
+  </table>
+  <p class="muted">{{ v.import_cost.disclaimer }}</p>
+</div>
+{% endif %}
 
 <div class="card">
   <h3>Equipment</h3>

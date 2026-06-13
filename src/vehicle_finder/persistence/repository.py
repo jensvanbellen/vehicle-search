@@ -28,6 +28,7 @@ _SYNC_FIELDS = (
     "variant",
     "model_year",
     "registration_date",
+    "build_date",
     "mileage_km",
     "price",
     "currency",

@@ -110,6 +110,7 @@ def parse_vehicle(
         variant=(str(v.get("engine")).strip() or None) if v.get("engine") else None,
         model_year=year,
         registration_date=reg_date,
+        build_date=built,
         mileage_km=mileage,
         price=price,
         currency="EUR",

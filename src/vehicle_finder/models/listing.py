@@ -51,6 +51,7 @@ class VehicleListing(SQLModel, table=True):
     variant: str | None = None  # generation / trim, when identifiable
     model_year: int | None = Field(default=None, index=True)
     registration_date: date | None = None
+    build_date: date | None = None  # production date (drives pre-LCI/LCI detection)
 
     # --- Condition / commercials ---
     mileage_km: int | None = Field(default=None, index=True)
@@ -87,6 +88,7 @@ class VehicleListing(SQLModel, table=True):
     image_phashes: list[str] = Field(default_factory=list, sa_column=Column(JSON))
     data_quality: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     raw_payload: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
+    rdw: dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))  # RDW enrichment
     score_breakdown: list[dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
 
     # --- Car-specific (nullable) ---

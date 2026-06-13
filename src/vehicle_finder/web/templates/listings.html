@@ -33,6 +33,8 @@
       <td>
         <a href="/group/{{ v.group_id }}"><strong>{{ v.make }} {{ v.model }}</strong></a>
         {% if v.is_new %}<span class="badge" style="color:var(--good)">new</span>{% endif %}
+        {% if v.lci and v.lci != 'unknown' %}<span class="badge" style="color:{{ 'var(--good)' if v.lci == 'pre-LCI' else 'var(--muted)' }}">{{ v.lci }}</span>{% endif %}
+        {% if v.rdw_verified %}<span class="badge" style="color:var(--good)">RDW</span>{% endif %}
         {% if v.shortlisted %}★{% endif %}<br/>
         {% for s in v.sources %}<span class="badge">{{ s }}</span>{% endfor %}
         {% if v.member_count > 1 %}<span class="badge" style="color:var(--accent)">seen on {{ v.member_count }}</span>{% endif %}

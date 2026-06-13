@@ -14,6 +14,7 @@ from vehicle_finder.config import get_settings
 from vehicle_finder.configio import get_search, load_searches, load_sources
 from vehicle_finder.dedup.cluster import regroup
 from vehicle_finder.distance import distance_from_home_km
+from vehicle_finder.enrich.rdw import enrich_listings
 from vehicle_finder.logging import get_logger
 from vehicle_finder.models.history import SourceRun
 from vehicle_finder.models.listing import VehicleListing, utcnow
@@ -154,6 +155,8 @@ def run_fetch(
                 for audit in audits:
                     session.add(audit)
                 session.flush()
+                # Enrich NL-plated listings with official RDW data (free; skips if disabled).
+                enrich_listings(session, client)
                 # Recompute cross-platform groups (manual decisions sticky) + group scores.
                 summary.groups_total = regroup(session)
     finally:

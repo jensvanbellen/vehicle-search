@@ -1,0 +1,13 @@
+# Facelift (LCI) boundaries per model generation, used to flag pre-LCI vs LCI.
+# Keyed by make + model; `facelift_build_date` is when LCI production began.
+# Best-effort dates — verify and extend. A car built before the date is pre-LCI.
+generations:
+  BMW X5:
+    G05:
+      facelift_build_date: "2023-03-01"   # X5 G05 LCI production ~spring 2023
+  BMW X6:
+    G06:
+      facelift_build_date: "2023-04-01"
+  BMW X7:
+    G07:
+      facelift_build_date: "2022-08-01"
