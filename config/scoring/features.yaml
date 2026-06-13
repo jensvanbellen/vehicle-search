@@ -31,9 +31,9 @@ features:
 
   panoramic_roof:
     label: "Panoramic roof / Sky Lounge"
-    aliases_de: ["Panoramadach", "Panorama Glasdach", "Sky Lounge"]
+    aliases_de: ["Panoramadach", "Panorama Glasdach", "Sky Lounge", "Pano"]
     aliases_nl: ["panoramadak", "panodak", "sky lounge", "schuif-kanteldak"]
-    aliases_en: ["panoramic roof", "panorama roof", "sky lounge"]
+    aliases_en: ["panoramic roof", "panorama roof", "sky lounge", "Panorama"]
     points: 4
 
   head_up_display:
@@ -59,7 +59,7 @@ features:
 
   harman_kardon:
     label: "Harman Kardon audio"
-    aliases_en: ["Harman Kardon", "Harman/Kardon", "Harman"]
+    aliases_en: ["Harman Kardon", "Harman/Kardon", "Harman", "H&K", "HiFi"]
     points: 3
 
   bowers_wilkins:
@@ -77,11 +77,106 @@ features:
     rarity: auto
 
   air_suspension:
-    label: "Air suspension"
-    aliases_de: ["Luftfederung", "Luftfahrwerk"]
-    aliases_nl: ["luchtvering"]
-    aliases_en: ["air suspension"]
+    label: "Air suspension (adaptive)"
+    aliases_de: ["Luftfederung", "Luftfahrwerk", "Adaptive Zweiachs-Luftfederung"]
+    aliases_nl: ["luchtvering", "adaptieve luchtvering", "luchtophanging"]
+    aliases_en: ["air suspension", "adaptive air suspension"]
+    points: 8
+    rarity: auto
+
+  # ---- X5 G05 comfort/luxury options the search prioritises (NL/DE/EN dealer text) ----
+  driving_assistant_professional:
+    label: "Driving Assistant Professional"
+    aliases_de: ["Driving Assistant Professional", "Fahrassistent Professional", "DA Pro", "DAPro", "DA-Pro", "Driving Ass. Prof"]
+    aliases_nl: ["Driving Assistant Professional", "Rijassistent Professional", "rijassistentie professional"]
+    aliases_en: ["Driving Assistant Professional", "driving assistant pro"]
+    points: 8
+    rarity: auto
+
+  comfort_seats:
+    label: "Comfort seats"
+    aliases_de: ["Komfortsitze"]
+    aliases_nl: ["comfortstoelen", "comfortzetels", "comfort stoelen"]
+    aliases_en: ["comfort seats"]
+    points: 6
+    rarity: auto
+
+  seat_ventilation:
+    label: "Front seat ventilation"
+    aliases_de: ["Sitzbelüftung", "belüftete Sitze", "Aktive Sitzbelüftung"]
+    aliases_nl: ["stoelventilatie", "geventileerde stoelen", "ventilatie stoelen", "gekoelde stoelen"]
+    aliases_en: ["seat ventilation", "ventilated seats", "cooled seats"]
+    points: 6
+    rarity: auto
+
+  seat_massage:
+    label: "Seat massage"
+    aliases_de: ["Massagefunktion", "Massagesitze"]
+    aliases_nl: ["massagefunctie", "massagestoelen", "stoelmassage"]
+    aliases_en: ["massage seats", "massage function"]
+    points: 6
+    rarity: auto
+
+  heated_steering_wheel:
+    label: "Heated steering wheel"
+    aliases_de: ["Lenkradheizung", "beheiztes Lenkrad"]
+    aliases_nl: ["stuurverwarming", "stuurwielverwarming", "verwarmd stuur"]
+    aliases_en: ["heated steering wheel"]
     points: 4
+
+  soft_close_doors:
+    label: "Soft-close doors"
+    aliases_de: ["Soft-Close", "Komfortschließung", "Soft Close Automatik"]
+    aliases_nl: ["soft-close", "softclose", "soft close portieren"]
+    aliases_en: ["soft-close", "soft close doors"]
+    points: 5
+    rarity: auto
+
+  acoustic_glass:
+    label: "Acoustic glazing"
+    aliases_de: ["Akustikverglasung", "Akustikglas"]
+    aliases_nl: ["akoestisch glas", "akoestiekglas", "geluidwerend glas"]
+    aliases_en: ["acoustic glazing", "acoustic glass", "sound insulating glass"]
+    points: 5
+    rarity: auto
+
+  four_zone_climate:
+    label: "Four-zone climate control"
+    aliases_de: ["4-Zonen-Klimaautomatik", "Vierzonen-Klimaautomatik"]
+    aliases_nl: ["4-zone airco", "vierzone climate", "4 zone climate control", "4-zone klimaat"]
+    aliases_en: ["four-zone climate", "4-zone climate"]
+    points: 4
+
+  merino_leather:
+    label: "BMW Individual Merino leather"
+    aliases_de: ["Merino", "Merino Leder", "Individual Merino"]
+    aliases_nl: ["merino", "merino leder", "individual merino"]
+    aliases_en: ["Merino leather", "Individual Merino"]
+    points: 6
+    rarity: auto
+
+  leather_dashboard:
+    label: "Leather-covered dashboard"
+    aliases_de: ["Lederarmaturentafel", "Lederinstrumententafel"]
+    aliases_nl: ["lederen dashboard", "leder dashboard", "dashboard in leder", "lederen instrumentenpaneel"]
+    aliases_en: ["leather dashboard"]
+    points: 5
+    rarity: auto
+
+  comfort_access:
+    label: "Comfort Access (keyless)"
+    aliases_de: ["Komfortzugang", "Comfort Access"]
+    aliases_nl: ["comfort access", "keyless entry"]
+    aliases_en: ["Comfort Access", "keyless entry"]
+    points: 2
+
+  auxiliary_heating:
+    label: "Auxiliary / parking heater"
+    aliases_de: ["Standheizung"]
+    aliases_nl: ["standkachel", "standverwarming", "webasto"]
+    aliases_en: ["auxiliary heating", "parking heater"]
+    points: 4
+    rarity: auto
 
   # ---- Motorcycles (BMW S 1000 XR / sport-touring desirable options) ----
   m_package:

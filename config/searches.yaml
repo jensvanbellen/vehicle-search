@@ -60,22 +60,41 @@ searches:
     make: BMW
     model: X5
     variant_generation: G05
+    # Target: late pre-LCI xDrive30d (48V mild-hybrid), comfort-oriented, LHD.
+    # The X5 G05 LCI facelift began production ~spring 2023, so 2021-2022 (and very
+    # early 2023) registrations are almost all pre-LCI. xDrive30d-vs-40d and pre/post-LCI
+    # are NOT structured fields here — segment by the `engine` field + verify with seller.
     min_year: 2021
     max_year: 2023
     countries: [NL, DE]
+    # Prioritised desirable options (scored when detected in the listing description).
+    # Order is informational; the scorer weights each via scoring/features.yaml.
     preferred_equipment:
-      - four_wheel_steering
-      - surround_view_camera
-      - rear_sunblinds
-      - panoramic_roof
+      - driving_assistant_professional   # hard-ish requirement (ACC stop&go + lane centering)
+      - surround_view_camera             # Parking Assistant Plus / 360
+      - air_suspension                   # adaptive two-axle air suspension
+      - comfort_seats
+      - seat_ventilation
+      - seat_massage
+      - heated_steering_wheel
       - head_up_display
-      - adaptive_cruise_control
+      - four_wheel_steering              # Integral Active Steering
+      - merino_leather
+      - leather_dashboard
+      - acoustic_glass
+      - four_zone_climate
+      - soft_close_doors
+      - comfort_access
+      - panoramic_roof                   # Sky Lounge
+      - rear_sunblinds
+      - auxiliary_heating
       - towbar
-      - harman_kardon
       - bowers_wilkins
-      - laser_light
-      - air_suspension
-    excluded_terms: []
+      - harman_kardon
+    # Understated/luxury colour preferences (used in manual ranking; informational).
+    preferred_colours: [groen, grijs, blauw, antraciet]
+    # Deal-breakers per the brief (these DROP a listing). Kept minimal to avoid over-filtering.
+    excluded_terms: ["verlaagd onderstel", "gechipt", "stage 1", "stage 2"]
     source_codes:
       bmw-nl:
         serie: "BMW X Serie"
