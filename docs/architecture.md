@@ -3,7 +3,8 @@
 A local, free, self-hosted tool to find, track, compare and rank used **cars and
 motorcycles** in NL/DE, with cross-platform duplicate merging and explainable scoring.
 
-Status: **investigation complete — awaiting approval before scaffolding.**
+Status: **implemented.** This document records the investigation and plan; the build
+followed it (see the README and git history for the delivered system).
 
 ---
 
