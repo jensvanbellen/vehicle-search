@@ -218,6 +218,15 @@ class Scorer:
         if (listing.country or "").upper() == "DE":
             lines.append(ScoreLine("German import", -float(w.get("import_friction_penalty", 5))))
 
+        # Accident / damage history reported by the source.
+        if listing.accident_info:
+            lines.append(
+                ScoreLine(
+                    "Accident/damage history reported",
+                    -float(w.get("accident_history_penalty", 35)),
+                )
+            )
+
         # Completeness / trust.
         present = sum(
             1

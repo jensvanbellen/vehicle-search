@@ -13,6 +13,7 @@
 #   seller_dealer        : bonus/penalty by seller type
 #   distance             : penalty per `distance_step` km from home (capped)
 #   import_friction      : penalty for a foreign (DE) listing (import hassle)
+#   accident_history     : penalty when a source reports prior accident/damage history
 #   completeness         : bonus when key fields are present (trust/quality)
 
 defaults: &defaults
@@ -27,6 +28,7 @@ defaults: &defaults
   seller_private_bonus: 0
   distance: { distance_step_km: 100, penalty_per_step: 1.5, cap: 9 }
   import_friction_penalty: 5         # DE listing
+  accident_history_penalty: 35
   completeness_bonus: 5
 
 car:

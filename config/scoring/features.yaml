@@ -7,7 +7,7 @@ features:
   # ---- Cars (BMW X5 G05 desirable options) ----
   four_wheel_steering:
     label: "Four-wheel steering"
-    aliases_de: ["Integral Aktivlenkung", "Hinterachslenkung", "Allradlenkung"]
+    aliases_de: ["Integral Aktivlenkung", "Integral-Aktivlenkung", "Hinterachslenkung", "Allradlenkung"]
     aliases_nl: ["vierwielbesturing", "achterasbesturing"]
     aliases_en: ["four-wheel steering", "integral active steering", "rear-axle steering", "rear axle steering"]
     points: 12
@@ -15,7 +15,7 @@ features:
 
   surround_view_camera:
     label: "Surround-view / 360° camera"
-    aliases_de: ["Surround View", "Umgebungskamera"]
+    aliases_de: ["Surround View", "Parking Assistant Plus", "Umgebungskamera"]
     aliases_nl: ["omgevingscamera", "360 camera", "360graden camera"]
     aliases_en: ["surround view", "360 camera", "birds-eye", "bird's-eye", "360°"]
     points: 6
@@ -78,7 +78,7 @@ features:
 
   air_suspension:
     label: "Air suspension (adaptive)"
-    aliases_de: ["Luftfederung", "Luftfahrwerk", "Adaptive Zweiachs-Luftfederung"]
+    aliases_de: ["Luftfederung", "Luftfahrwerk", "Adaptive Zweiachs-Luftfederung", "Adaptive 2-Achs Luftfederung", "Adaptive 2-Achs-Luftfederung"]
     aliases_nl: ["luchtvering", "adaptieve luchtvering", "luchtophanging"]
     aliases_en: ["air suspension", "adaptive air suspension"]
     points: 8

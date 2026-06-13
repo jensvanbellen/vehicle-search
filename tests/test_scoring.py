@@ -64,6 +64,15 @@ def test_required_equipment_missing_penalised() -> None:
     assert any(line.points < 0 and "Missing required" in line.label for line in result.lines)
 
 
+def test_accident_history_is_penalised() -> None:
+    damaged = _car("damaged", 50000, 100000, 2021, ["panoramic_roof"])
+    damaged.accident_info = "Accident history reported"
+    result = Scorer().compute_scores([damaged], TARGET, reference_year=2026)[0]
+    assert any(
+        line.points < 0 and "Accident/damage history" in line.label for line in result.lines
+    )
+
+
 def test_rare_option_shows_frequency() -> None:
     # 1 of 4 listings has four_wheel_steering => "on 25% of matches".
     listings = [

@@ -6,7 +6,12 @@ from datetime import date
 
 from sqlmodel import Session, select
 
-from vehicle_finder.dedup.cluster import cluster_listings, listing_key, regroup
+from vehicle_finder.dedup.cluster import (
+    build_representative,
+    cluster_listings,
+    listing_key,
+    regroup,
+)
 from vehicle_finder.dedup.decisions import confirm_merge, mark_not_duplicate
 from vehicle_finder.dedup.matcher import MatchVerdict, compute_match
 from vehicle_finder.models.enums import SellerType, VehicleType
@@ -104,6 +109,13 @@ def test_cluster_groups_crossposts() -> None:
     outcome = cluster_listings([a, b, c], set(), set())
     assert outcome.group_id_of[listing_key(a)] == outcome.group_id_of[listing_key(b)]
     assert outcome.group_id_of[listing_key(c)] != outcome.group_id_of[listing_key(a)]
+
+
+def test_representative_preserves_accident_history() -> None:
+    listing = _mk("bmw-de", "accident")
+    listing.accident_info = "Accident history reported"
+    rep = build_representative([listing])
+    assert rep.accident_info == "Accident history reported"
 
 
 def test_manual_merge_forces_group() -> None:

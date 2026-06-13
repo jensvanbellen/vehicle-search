@@ -16,6 +16,7 @@ from vehicle_finder.sources.bmw_de import (
     build_results_url,
     looks_like_challenge,
     parse_offers,
+    with_start_index,
 )
 
 Loader = Callable[..., dict[str, Any]]
@@ -32,9 +33,28 @@ def test_filter_param_matches_documented_format() -> None:
     assert build_filter_param("X5_G05", 2021, 2023) == DOCUMENTED_FILTER
 
 
+def test_filter_param_includes_engine_and_mileage() -> None:
+    param = build_filter_param(
+        "X5_G05",
+        2021,
+        2023,
+        engine_type="DIESEL",
+        max_mileage=80000,
+        equipment_groups={"drivingAssistance": ["Adaptive 2-Achs-Luftfederung"]},
+    )
+    assert "%2522ENGINE_TYPE%2522%253A%255B%2522DIESEL%2522%255D" in param
+    assert "%2522USED_CAR_MILEAGE%2522%253A%255B0%252C80000%255D" in param
+    assert "Adaptive%25202-Achs-Luftfederung" in param
+
+
 def test_results_url_built() -> None:
     url = build_results_url("https://www.bmw.de", "/de-de/sl/gebrauchtwagen/results", "ABC")
     assert url.startswith("https://www.bmw.de/de-de/sl/gebrauchtwagen/results?filters=ABC")
+
+
+def test_pagination_url_replaces_start_index() -> None:
+    url = "https://stolo.example/search?maxResults=12&startIndex=0&brand=BMW"
+    assert with_start_index(url, 24).endswith("maxResults=12&startIndex=24&brand=BMW")
 
 
 def test_parse_offers_fixture(fixture: Loader) -> None:
@@ -80,6 +100,56 @@ def test_parse_offers_edge_case_missing_fields(fixture: Loader) -> None:
     assert edge.price is None
     assert edge.mileage_km is None
     assert "price missing" in edge.get_data_quality().warnings
+
+
+def test_parse_stolo_vehicle_payload(fixture: Loader) -> None:
+    data = fixture("bmw_de", "stolo_hits.json")
+    listings, found, failures, _warnings, layout = parse_offers(
+        data, "https://www.bmw.de", "x5-g05"
+    )
+
+    assert found == 1
+    assert failures == 0
+    assert layout is False
+
+    listing = listings[0]
+    assert listing.source_listing_id == "018e933c-75c4-73fa-8190-f387c4c683b6"
+    assert listing.url.startswith("https://www.bmw.de/de-de/sl/gebrauchtwagen/details/")
+    assert "modelCode=JU81" in listing.url
+    assert listing.title == "BMW X5 xDrive30d"
+    assert listing.model == "X5"
+    assert listing.variant == "X5 30D"
+    assert listing.price == 65890
+    assert listing.mileage_km == 41855
+    assert listing.model_year == 2021
+    assert listing.build_date is not None
+    assert listing.fuel_type is FuelType.DIESEL
+    assert listing.transmission is Transmission.AUTOMATIC
+    assert listing.power_hp == 286
+    assert listing.power_kw == 210
+    assert listing.displacement_cc == 2993
+    assert listing.owners == 1
+    assert listing.warranty == "BMW Premium Selection (24 months)"
+    assert listing.vat_status == "vat_deductible"
+    assert listing.accident_info is not None
+    assert "Heckklappe" in listing.accident_info
+    assert "accident/damage history reported" in listing.get_data_quality().warnings
+
+
+def test_parse_stolo_structured_equipment(fixture: Loader) -> None:
+    data = fixture("bmw_de", "stolo_hits.json")
+    listings, *_ = parse_offers(data, "https://www.bmw.de", "x5-g05")
+    canon = {f.canonical for f in listings[0].get_features()}
+
+    assert "driving_assistant_professional" in canon
+    assert "surround_view_camera" in canon
+    assert "air_suspension" in canon
+    assert "comfort_seats" in canon
+    assert "seat_ventilation" in canon
+    assert "panoramic_roof" in canon
+    assert "head_up_display" in canon
+    assert "towbar" in canon
+    assert "harman_kardon" in canon
 
 
 def test_unknown_payload_flags_layout_change() -> None:

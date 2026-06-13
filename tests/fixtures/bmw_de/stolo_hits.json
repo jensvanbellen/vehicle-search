@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "totalCount": 1
+  },
+  "hits": [
+    {
+      "country": "DE",
+      "score": 99.0,
+      "vehicle": {
+        "country": "DE",
+        "documentId": "LMPR8FEFCIX1F31EO",
+        "vssId": "018e933c-75c4-73fa-8190-f387c4c683b6",
+        "internal": {
+          "vssConfigId": "JU81:FMCSW,P0C3D,S01CE,S02VR,S03AC,S0402,S0453,S0456,S05AU,S05DN,S0610,S0688"
+        },
+        "media": {
+          "usedCarImageList": [
+            {
+              "url": "https://img.bmw.de/x5/1.jpg"
+            }
+          ]
+        },
+        "ordering": {
+          "distributionData": {
+            "destinationLocationDomesticDealerName": "BMW Test Dealer",
+            "locationOutletNickname": "Dealer City"
+          },
+          "retailData": {
+            "initialRegistrationDate": "2021-10-15",
+            "locationOutletAddress": {
+              "postalCode": "80331"
+            }
+          },
+          "productionData": {
+            "productionDate": "2021-08-12",
+            "vin17": "WBAJU810309N20188"
+          }
+        },
+        "price": {
+          "listPriceCurrency": "EUR",
+          "grossSalesPrice": 65890,
+          "grossListPrice": 107670
+        },
+        "salesProcess": {
+          "type": "AVAILABLE"
+        },
+        "vehicleLifeCycle": {
+          "involvedInAccident": true,
+          "mileage": {
+            "km": 41855
+          },
+          "numberOfPreviousOwners": 1,
+          "taxDeductible": true,
+          "vehicleDamage": {
+            "involvedInAccident": true,
+            "damageDescription": "Heckklappe instandgesetzt",
+            "isRepaired": false
+          },
+          "warrantyInfo": {
+            "type": "BMW Premium Selection",
+            "duration": "24"
+          },
+          "usedCarProgram": "BMW Premium Selection"
+        },
+        "vehicleSpecification": {
+          "modelAndOption": {
+            "baseFuelType": "DIESEL",
+            "bodyType": "SPORT_ACTIVITY_VEHICLE",
+            "color": {
+              "clusterRough": "GRAY"
+            },
+            "driveType": "ALL_WHEEL",
+            "equipments": {
+              "S02VR": {
+                "name": {
+                  "de_DE": "Adaptive 2-Achs Luftfederung"
+                }
+              },
+              "S03AC": {
+                "name": {
+                  "de_DE": "Anhängerkupplung mit schwenkbarem Kugelkopf"
+                }
+              },
+              "S0402": {
+                "name": {
+                  "de_DE": "Panorama Glasdach"
+                }
+              },
+              "S0453": {
+                "name": {
+                  "de_DE": "Aktive Sitzbelüftung vorn"
+                }
+              },
+              "S0456": {
+                "name": {
+                  "de_DE": "Komfortsitze vorn, elektrisch verstellbar"
+                }
+              },
+              "S05AU": {
+                "name": {
+                  "de_DE": "Driving Assistant Professional"
+                }
+              },
+              "S05DN": {
+                "name": {
+                  "de_DE": "Parking Assistant Plus"
+                }
+              },
+              "S0610": {
+                "name": {
+                  "de_DE": "BMW Head-Up Display"
+                }
+              },
+              "S0688": {
+                "name": {
+                  "de_DE": "Harman Kardon Surround Sound System"
+                }
+              }
+            },
+            "model": {
+              "derivative": "X5 30D",
+              "modelName": "X5 xDrive30d",
+              "modelDescription": {
+                "de_DE": "X5 xDrive30d"
+              }
+            },
+            "modelRange": {
+              "name": "G05",
+              "description": {
+                "de_DE": "BMW X5"
+              }
+            },
+            "transmission": "AUTOMATIC"
+          },
+          "technicalAndEmission": {
+            "technicalData": {
+              "cylinderCapacity": {
+                "cm³": 2993
+              },
+              "doorCount": 5,
+              "otdRawData": [
+                {
+                  "key": "C_LEIST_GES_PS",
+                  "value": "286"
+                },
+                {
+                  "key": "C_LEIST_GES",
+                  "value": "210"
+                },
+                {
+                  "key": "N_SITZE",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

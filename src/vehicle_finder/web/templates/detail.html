@@ -25,7 +25,7 @@
 <div class="card">
   <h3>Per-source listings &amp; prices</h3>
   <table>
-    <thead><tr><th>Source</th><th>Price</th><th>Mileage</th><th>Seller</th><th>Country</th><th>Kenteken</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>Source</th><th>Price</th><th>Mileage</th><th>Seller</th><th>Country</th><th>Kenteken</th><th>History</th><th>Status</th><th></th></tr></thead>
     <tbody>
       {% for m in v.members %}
       <tr>
@@ -35,6 +35,12 @@
         <td>{{ m.seller_name or '—' }}</td>
         <td>{{ m.country or '—' }}</td>
         <td>{{ m.kenteken or '—' }}</td>
+        <td>
+          {% if m.accident_info %}<span class="badge" style="color:var(--bad)">accident</span>{% endif %}
+          {% if m.owners %}<span class="badge">{{ m.owners }} owner{{ '' if m.owners == 1 else 's' }}</span>{% endif %}
+          {% if m.warranty %}<span class="badge" style="color:var(--good)">{{ m.warranty }}</span>{% endif %}
+          {% if not m.accident_info and not m.owners and not m.warranty %}—{% endif %}
+        </td>
         <td>{{ m.status }}</td>
         <td><a href="{{ m.url }}" target="_blank" rel="noopener">open ↗</a></td>
       </tr>
@@ -42,6 +48,15 @@
     </tbody>
   </table>
 </div>
+
+{% set accident_rows = [] %}
+{% for m in v.members %}{% if m.accident_info %}{% if accident_rows.append(m) %}{% endif %}{% endif %}{% endfor %}
+{% if accident_rows %}
+<div class="card" style="border-color:var(--bad)">
+  <h3 class="warn">Accident / damage history</h3>
+  <ul>{% for m in accident_rows %}<li><span class="badge">{{ m.source }}</span> {{ m.accident_info }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
 
 <div class="card">
   <h3>Score breakdown</h3>

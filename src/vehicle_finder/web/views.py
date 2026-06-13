@@ -138,6 +138,9 @@ def group_detail_view(session: Session, group_id: str) -> dict[str, Any] | None:
                 "seller_name": m.seller_name,
                 "country": m.country,
                 "kenteken": m.kenteken,
+                "owners": m.owners,
+                "warranty": m.warranty,
+                "accident_info": m.accident_info,
                 "status": m.status.value,
                 "data_quality": m.get_data_quality().warnings,
             }

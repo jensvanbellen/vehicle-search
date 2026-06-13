@@ -190,7 +190,11 @@ def build_representative(members: list[VehicleListing]) -> VehicleListing:
         seller_name=base.seller_name,
         country=base.country,
         distance_km=min(distances) if distances else base.distance_km,
+        owners=base.owners,
         warranty=base.warranty,
+        service_history=base.service_history,
+        accident_info=base.accident_info,
+        vat_status=base.vat_status,
         description=base.description,
         raw_options_text=base.raw_options_text,  # so character penalties see the options text
         image_urls=list(base.image_urls),

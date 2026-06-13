@@ -66,6 +66,8 @@ searches:
     # are NOT structured fields here — segment by the `engine` field + verify with seller.
     min_year: 2021
     max_year: 2023
+    max_mileage: 80000
+    fuel_type: diesel
     countries: [NL, DE]
     # Diesels only (the 48V mild-hybrid xDrive30d primary + xDrive40d fallback); this drops
     # the 45e PHEV / 40i petrol / M noise. Matched against variant + title.
@@ -104,6 +106,10 @@ searches:
         model: "X5"
       bmw-de:
         marketing_model_range: "X5_G05"
+        engine_type: "DIESEL"
+        equipment_groups:
+          wheelsAndTires: ["Aktive Sitzbelüftung vorn"]
+          drivingAssistance: ["Adaptive 2-Achs-Luftfederung"]
       dasimport:
         brand: 3500
         model: 49
