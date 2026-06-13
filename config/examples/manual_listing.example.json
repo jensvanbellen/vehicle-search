@@ -1,0 +1,20 @@
+{
+  "title": "BMW S 1000 XR M-package (mobile.de, manual entry)",
+  "vehicle_type": "motorcycle",
+  "source": "mobile-de",
+  "url": "https://suchen.mobile.de/fahrzeuge/details.html?id=EXAMPLE",
+  "make": "BMW",
+  "model": "S 1000 XR",
+  "model_year": 2024,
+  "mileage_km": 3500,
+  "price": 21900,
+  "country": "DE",
+  "seller_type": "dealer",
+  "seller_name": "BMW Motorrad Köln",
+  "location": "Köln",
+  "power_hp": 170,
+  "colour": "zwart",
+  "fuel_type": "Benzine",
+  "transmission": "Handgeschakeld",
+  "options": "M Paket, Dynamic ESA, Schaltassistent Pro, Heizgriffe, Keyless Ride, Hauptständer"
+}

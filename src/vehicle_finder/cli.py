@@ -69,10 +69,26 @@ def export(
 def import_url(url: str = typer.Argument(..., help="A single listing URL to import.")) -> None:
     """Import one listing from a pasted URL (Marktplaats listing pages, etc.)."""
     _boot()
-    from vehicle_finder.sources.url_import import import_single_url
+    from vehicle_finder.sources.url_import import ImportNotAllowedError, import_single_url
 
-    listing = import_single_url(url)
+    try:
+        listing = import_single_url(url)
+    except ImportNotAllowedError as exc:
+        typer.secho(str(exc), fg=typer.colors.YELLOW)
+        raise typer.Exit(1) from exc
     typer.echo(f"Imported: {listing.title} ({listing.source})")
+
+
+@app.command(name="add-manual")
+def add_manual(
+    file: str = typer.Option(..., "--file", help="JSON file with listing fields."),
+) -> None:
+    """Add a hand-entered listing from a JSON file (mobile.de fallback, etc.)."""
+    _boot()
+    from vehicle_finder.sources.manual import add_manual_listing, load_manual_input
+
+    listing = add_manual_listing(load_manual_input(file))
+    typer.echo(f"Added: {listing.title} ({listing.source})")
 
 
 @app.command()
