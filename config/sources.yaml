@@ -21,8 +21,8 @@ sources:
     notes: Same platform as bmw-nl; serie values differ (e.g. "BMW Sport", "BMW Heritage").
 
   dasimport:
-    adapter: dasimport       # polite server-rendered HTML (implemented in milestone 3)
-    enabled: false
+    adapter: dasimport       # polite server-rendered HTML
+    enabled: true
     vehicle_types: [car]
     base_url: https://www.dasimport.nl
     request_uri: /aanbod

@@ -36,7 +36,9 @@ def _parse_bikes(data: dict[str, Any]) -> ParseOut:
 
 
 def test_parse_cars_fixture(fixture: Loader) -> None:
-    listings, found, failures, warnings, layout = _parse_cars(fixture("bmw_nl", "x5_cars_page1.json"))
+    listings, found, failures, warnings, layout = _parse_cars(
+        fixture("bmw_nl", "x5_cars_page1.json")
+    )
     assert found == 5
     assert len(listings) == 5
     assert failures == 0

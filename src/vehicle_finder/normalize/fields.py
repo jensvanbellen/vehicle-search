@@ -75,7 +75,24 @@ _FUEL_MAP: dict[str, FuelType] = {
 def normalize_fuel(value: object) -> FuelType:
     if not value:
         return FuelType.UNKNOWN
-    return _FUEL_MAP.get(str(value).strip().lower(), FuelType.OTHER)
+    s = str(value).strip().lower()
+    if s in _FUEL_MAP:
+        return _FUEL_MAP[s]
+    # Substring fallback for compound labels like "Plug-in (Benzine/Elektrisch)".
+    # Order matters: plug-in before hybrid/electric (the label also contains "elektr").
+    if "plug-in" in s or "plugin" in s:
+        return FuelType.PLUGIN_HYBRID
+    if "hybri" in s:
+        return FuelType.HYBRID
+    if "elektr" in s or "electr" in s:
+        return FuelType.ELECTRIC
+    if "diesel" in s:
+        return FuelType.DIESEL
+    if "benzin" in s or "petrol" in s or "gasolin" in s:
+        return FuelType.PETROL
+    if "waterstof" in s or "wasserstoff" in s or "hydrogen" in s:
+        return FuelType.HYDROGEN
+    return FuelType.OTHER
 
 
 _TRANSMISSION_MAP: dict[str, Transmission] = {

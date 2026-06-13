@@ -94,6 +94,8 @@ def run_fetch(
                 fetched_sources.add(src_id)
                 result = per_source.setdefault(src_id, SourceRunResult(source=src_id))
                 audit = SourceRun(source=src_id, search_id=target.id)
+                # Apply this source's polite request rate (falls back to the global default).
+                client.min_delay = cfg.rate_limit_seconds or settings.request_delay_seconds
                 try:
                     fetched = adapter.fetch(target, client)
                 except Exception as exc:

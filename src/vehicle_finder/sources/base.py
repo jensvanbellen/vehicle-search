@@ -75,6 +75,7 @@ def _ensure_loaded() -> None:
     if _loaded:
         return
     _loaded = True
-    from vehicle_finder.sources import bmw_nl
+    from vehicle_finder.sources import bmw_nl, dasimport
 
     bmw_nl.register_adapters()
+    dasimport.register_adapters()
