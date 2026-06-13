@@ -16,7 +16,7 @@ from vehicle_finder.persistence.repository import upsert_listing
 
 
 @pytest.fixture
-def _populated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def populated_db(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     engine = db.get_engine(tmp_path / "exp.db")
     init_database(engine)
     monkeypatch.setattr(db, "_engine", engine)
@@ -38,7 +38,7 @@ def _populated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         )
 
 
-def test_json_export(_populated: None, tmp_path: Path) -> None:
+def test_json_export(populated_db: None, tmp_path: Path) -> None:
     out = str(tmp_path / "export")
     path = export_listings(fmt="json", out=out)
     assert path.endswith(".json")
@@ -48,7 +48,7 @@ def test_json_export(_populated: None, tmp_path: Path) -> None:
     assert "price_history" in payload["listings"][0]
 
 
-def test_csv_export(_populated: None, tmp_path: Path) -> None:
+def test_csv_export(populated_db: None, tmp_path: Path) -> None:
     out = str(tmp_path / "export")
     path = export_listings(fmt="csv", out=out)
     assert path.endswith(".csv")
@@ -57,6 +57,6 @@ def test_csv_export(_populated: None, tmp_path: Path) -> None:
     assert "BMW" in text
 
 
-def test_invalid_format(_populated: None, tmp_path: Path) -> None:
+def test_invalid_format(populated_db: None, tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="unsupported export format"):
         export_listings(fmt="xml", out=str(tmp_path / "x"))
