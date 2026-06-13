@@ -1,0 +1,35 @@
+{
+  "metadata": { "totalCount": 2, "marketingModelRange": "X5_G05" },
+  "data": {
+    "offers": [
+      {
+        "vehicleId": "DE-1001",
+        "modelName": "X5 xDrive45e",
+        "marketingModelRange": "X5_G05",
+        "derivative": "xDrive45e",
+        "price": { "amount": 61900, "currency": "EUR" },
+        "mileage": 42000,
+        "firstRegistration": "2022-05",
+        "powerHp": 394,
+        "powerKw": 290,
+        "fuelType": "PLUGIN_HYBRID",
+        "transmission": "AUTOMATIC",
+        "color": "Schwarz",
+        "dealerName": "BMW Niederlassung Köln",
+        "dealerCity": "Köln",
+        "detailPageUrl": "/de-de/sl/gebrauchtwagen/details/DE-1001",
+        "images": [ { "url": "https://img.bmw.de/1001/1.jpg" }, { "url": "https://img.bmw.de/1001/2.jpg" } ],
+        "description": "Head-Up Display, Anhängerkupplung, Sitzheizung, Panoramadach, Harman Kardon"
+      },
+      {
+        "vehicleId": "DE-1002",
+        "modelName": "X5 xDrive40d",
+        "marketingModelRange": "X5_G05",
+        "firstRegistration": "2021-09",
+        "fuelType": "DIESEL",
+        "transmission": "AUTOMATIC",
+        "dealerCity": "München"
+      }
+    ]
+  }
+}
