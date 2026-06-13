@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO")
     log_json: bool = Field(default=False)
 
+    # Listing lifecycle: how long an unseen listing stays ACTIVE before being marked inactive.
+    inactive_grace_hours: float = Field(default=48.0)
+
     # HTTP politeness — applied to every live fetch.
     http_timeout: float = Field(default=30.0)
     http_max_retries: int = Field(default=3)

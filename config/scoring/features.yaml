@@ -1,0 +1,169 @@
+# Rare/desirable options that earn score, with multilingual aliases (NL/DE/EN),
+# a base point value, and a rarity mode. rarity:auto derives an extra boost from how
+# rare the feature is in the CURRENT result set (rarer => bigger boost, shown transparently).
+# Aliases here are also used by the equipment normalizer. Tune points/aliases freely.
+
+features:
+  # ---- Cars (BMW X5 G05 desirable options) ----
+  four_wheel_steering:
+    label: "Four-wheel steering"
+    aliases_de: ["Integral Aktivlenkung", "Hinterachslenkung", "Allradlenkung"]
+    aliases_nl: ["vierwielbesturing", "achterasbesturing"]
+    aliases_en: ["four-wheel steering", "integral active steering", "rear-axle steering", "rear axle steering"]
+    points: 12
+    rarity: auto
+
+  surround_view_camera:
+    label: "Surround-view / 360° camera"
+    aliases_de: ["Surround View", "Umgebungskamera"]
+    aliases_nl: ["omgevingscamera", "360 camera", "360graden camera"]
+    aliases_en: ["surround view", "360 camera", "birds-eye", "bird's-eye", "360°"]
+    points: 6
+    rarity: auto
+
+  rear_sunblinds:
+    label: "Rear sunblinds"
+    aliases_de: ["Sonnenschutzrollos", "Rollos Fond"]
+    aliases_nl: ["zonwering achter", "achterraam rolgordijn"]
+    aliases_en: ["rear sunblinds", "rear window blinds", "manual rear window blinds"]
+    points: 4
+    rarity: auto
+
+  panoramic_roof:
+    label: "Panoramic roof / Sky Lounge"
+    aliases_de: ["Panoramadach", "Panorama Glasdach", "Sky Lounge"]
+    aliases_nl: ["panoramadak", "panodak", "sky lounge", "schuif-kanteldak"]
+    aliases_en: ["panoramic roof", "panorama roof", "sky lounge"]
+    points: 4
+
+  head_up_display:
+    label: "Head-up display"
+    aliases_de: ["Head-Up Display", "Head-Up"]
+    aliases_nl: ["head-up display", "head up"]
+    aliases_en: ["head-up display", "hud", "head up display"]
+    points: 3
+
+  adaptive_cruise_control:
+    label: "Adaptive cruise control"
+    aliases_de: ["Aktive Geschwindigkeitsregelung", "ACC"]
+    aliases_nl: ["adaptieve cruise control", "active cruise control"]
+    aliases_en: ["adaptive cruise control", "active cruise control"]
+    points: 3
+
+  towbar:
+    label: "Towbar"
+    aliases_de: ["Anhängerkupplung", "AHK"]
+    aliases_nl: ["trekhaak"]
+    aliases_en: ["towbar", "tow hitch", "tow bar"]
+    points: 3
+
+  harman_kardon:
+    label: "Harman Kardon audio"
+    aliases_en: ["Harman Kardon", "Harman/Kardon", "Harman"]
+    points: 3
+
+  bowers_wilkins:
+    label: "Bowers & Wilkins audio"
+    aliases_en: ["Bowers & Wilkins", "Bowers &Wilkins", "Bowers&Wilkins", "B&W Diamond"]
+    points: 5
+    rarity: auto
+
+  laser_light:
+    label: "BMW Laserlight"
+    aliases_de: ["Laserlicht", "BMW Laserlight"]
+    aliases_nl: ["laserlicht"]
+    aliases_en: ["laserlight", "laser light"]
+    points: 5
+    rarity: auto
+
+  air_suspension:
+    label: "Air suspension"
+    aliases_de: ["Luftfederung", "Luftfahrwerk"]
+    aliases_nl: ["luchtvering"]
+    aliases_en: ["air suspension"]
+    points: 4
+
+  # ---- Motorcycles (BMW S 1000 XR / sport-touring desirable options) ----
+  m_package:
+    label: "M Package"
+    aliases_de: ["M Paket", "M-Paket"]
+    aliases_nl: ["M pakket", "M-pakket"]
+    aliases_en: ["M package", "M-package"]
+    points: 8
+    rarity: auto
+
+  dynamic_package:
+    label: "Dynamic Package"
+    aliases_de: ["Dynamic Paket"]
+    aliases_nl: ["Dynamic pakket"]
+    aliases_en: ["Dynamic package"]
+    points: 5
+
+  touring_package:
+    label: "Touring Package"
+    aliases_de: ["Touring Paket"]
+    aliases_nl: ["Touring pakket"]
+    aliases_en: ["Touring package"]
+    points: 5
+
+  dynamic_esa:
+    label: "Dynamic ESA (electronic suspension)"
+    aliases_de: ["Dynamic ESA"]
+    aliases_en: ["Dynamic ESA", "DESA", "dynamic electronic suspension"]
+    points: 6
+    rarity: auto
+
+  adaptive_cornering_headlight:
+    label: "Adaptive / cornering headlight"
+    aliases_de: ["Kurvenlicht", "adaptives Kurvenlicht"]
+    aliases_nl: ["bochtenverlichting", "adaptieve koplamp"]
+    aliases_en: ["adaptive headlight", "cornering light"]
+    points: 5
+    rarity: auto
+
+  heated_grips:
+    label: "Heated grips"
+    aliases_de: ["Heizgriffe"]
+    aliases_nl: ["verwarmde handvatten", "verwarmde grepen"]
+    aliases_en: ["heated grips", "grip warmers"]
+    points: 3
+
+  cruise_control:
+    label: "Cruise control"
+    aliases_de: ["Tempomat", "Geschwindigkeitsregelung"]
+    aliases_nl: ["cruise control"]
+    aliases_en: ["cruise control"]
+    points: 2
+
+  keyless_ride:
+    label: "Keyless Ride"
+    aliases_en: ["Keyless Ride", "keyless"]
+    points: 3
+
+  gear_shift_assistant_pro:
+    label: "Gear Shift Assistant Pro (quickshifter)"
+    aliases_de: ["Schaltassistent Pro"]
+    aliases_nl: ["schakelassistent pro"]
+    aliases_en: ["Gear Shift Assistant Pro", "quickshifter", "GSA Pro", "shift assistant pro"]
+    points: 4
+
+  nav_preparation:
+    label: "Navigation preparation"
+    aliases_de: ["Navigationsvorbereitung"]
+    aliases_nl: ["navigatievoorbereiding"]
+    aliases_en: ["navigation preparation", "nav preparation"]
+    points: 1
+
+  luggage_preparation:
+    label: "Luggage / pannier preparation"
+    aliases_de: ["Kofferhalter", "Gepäckhalter"]
+    aliases_nl: ["koffervoorbereiding", "kofferset voorbereiding"]
+    aliases_en: ["pannier preparation", "luggage preparation", "case holder"]
+    points: 1
+
+  centre_stand:
+    label: "Centre stand"
+    aliases_de: ["Hauptständer"]
+    aliases_nl: ["middenbok", "hoofdstandaard"]
+    aliases_en: ["centre stand", "center stand", "main stand"]
+    points: 2

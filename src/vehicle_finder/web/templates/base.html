@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Vehicle Finder{% endblock %}</title>
+  <style>
+    :root { --bg:#0f1115; --card:#181b22; --muted:#8b93a7; --fg:#e8ecf4; --accent:#4f8cff; --good:#39d98a; --bad:#ff6b6b; --line:#262a33; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+    header { padding:14px 22px; border-bottom:1px solid var(--line); display:flex; gap:18px; align-items:baseline; }
+    header h1 { font-size:17px; margin:0; } header .muted { color:var(--muted); font-size:12px; }
+    main { padding:18px 22px; max-width:1500px; margin:0 auto; }
+    .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+    input, select, button { background:var(--card); color:var(--fg); border:1px solid var(--line); border-radius:7px; padding:7px 10px; font-size:13px; }
+    button { cursor:pointer; } button:hover { border-color:var(--accent); }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:9px 11px; border-bottom:1px solid var(--line); vertical-align:middle; }
+    th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em; }
+    tr:hover td { background:#1d212a; }
+    .thumb { width:92px; height:62px; object-fit:cover; border-radius:6px; background:#222; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; background:#222633; color:var(--muted); border:1px solid var(--line); }
+    .score { font-weight:700; font-size:15px; }
+    .num { font-variant-numeric: tabular-nums; }
+    .muted { color:var(--muted); }
+    .chips span { display:inline-block; background:#222633; border:1px solid var(--line); border-radius:6px; padding:1px 7px; margin:1px 2px; font-size:11px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px 18px; }
+    .grid div b { color:var(--muted); font-weight:500; display:block; font-size:11px; text-transform:uppercase; }
+    .pos { color:var(--good); } .neg { color:var(--bad); }
+    .gallery img { width:170px; height:120px; object-fit:cover; border-radius:8px; margin:3px; }
+    .warn { color:var(--bad); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="/">🚗 Vehicle Finder</a></h1>
+    <span class="muted">{% block subtitle %}local used car &amp; motorcycle finder{% endblock %}</span>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

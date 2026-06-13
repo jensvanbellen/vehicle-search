@@ -1,0 +1,87 @@
+# Search targets. Each is both a query spec and the "ideal" used for scoring.
+# Per-source codes were verified against the live BMW lineup (June 2026).
+# NOTE: equipment lists and year cutoffs are best-effort assumptions — tune freely.
+
+home_postcode: "2548 AE"   # default; overridable via VF_HOME_POSTCODE
+
+searches:
+  # ----------------------------------------------------------------- MOTORCYCLES
+  - id: s1000xr-2024
+    vehicle_type: motorcycle
+    make: BMW
+    model: S 1000 XR
+    aliases: ["S1000XR", "S 1000XR"]
+    min_year: 2024
+    countries: [NL, DE]
+    preferred_equipment:
+      - m_package
+      - dynamic_package
+      - touring_package
+      - dynamic_esa
+      - adaptive_cornering_headlight
+      - heated_grips
+      - cruise_control
+      - keyless_ride
+      - gear_shift_assistant_pro
+      - nav_preparation
+      - luggage_preparation
+      - centre_stand
+    source_codes:
+      bmw-motorrad-nl:
+        serie: "BMW Sport"
+        model: "S 1000 XR"
+
+  - id: r1300rs
+    vehicle_type: motorcycle
+    make: BMW
+    model: R 1300 RS
+    min_year: 2024
+    countries: [NL, DE]
+    preferred_equipment: [dynamic_esa, heated_grips, cruise_control, gear_shift_assistant_pro]
+    source_codes:
+      bmw-motorrad-nl:
+        serie: "BMW Sport"      # verified: R 1300 RS lives under "BMW Sport"
+        model: "R 1300 RS"
+
+  - id: r12-ninet
+    vehicle_type: motorcycle
+    make: BMW
+    model: R 12 nineT
+    countries: [NL, DE]
+    preferred_equipment: [heated_grips, gear_shift_assistant_pro, cruise_control]
+    source_codes:
+      bmw-motorrad-nl:
+        serie: "BMW Heritage"   # verified: site model string is "R12 NineT"
+        model: "R12 NineT"
+
+  # ------------------------------------------------------------------------ CARS
+  - id: x5-g05
+    vehicle_type: car
+    make: BMW
+    model: X5
+    variant_generation: G05
+    min_year: 2021
+    max_year: 2023
+    countries: [NL, DE]
+    preferred_equipment:
+      - four_wheel_steering
+      - surround_view_camera
+      - rear_sunblinds
+      - panoramic_roof
+      - head_up_display
+      - adaptive_cruise_control
+      - towbar
+      - harman_kardon
+      - bowers_wilkins
+      - laser_light
+      - air_suspension
+    excluded_terms: []
+    source_codes:
+      bmw-nl:
+        serie: "BMW X Serie"
+        model: "X5"
+      bmw-de:
+        marketing_model_range: "X5_G05"
+      dasimport:
+        brand: 3500
+        model: 49

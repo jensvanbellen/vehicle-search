@@ -1,0 +1,57 @@
+# Per-source adapter configuration. Rates are conservative and polite.
+sources:
+  bmw-nl:
+    adapter: bmw_ps          # BMW Premium Selection JSON platform
+    enabled: true
+    vehicle_types: [car]
+    base_url: https://occasions.bmw.nl
+    request_uri: /bmw/zoeken
+    rate_limit_seconds: 2.0
+    notes: >
+      Clean internal JSON API (verified). robots.txt permits search paths.
+      formData is an array of {name,value}; ranges use "min:..|max:..".
+
+  bmw-motorrad-nl:
+    adapter: bmw_ps
+    enabled: true
+    vehicle_types: [motorcycle]
+    base_url: https://occasions.bmw-motorrad.nl
+    request_uri: /motorrad/zoeken
+    rate_limit_seconds: 2.0
+    notes: Same platform as bmw-nl; serie values differ (e.g. "BMW Sport", "BMW Heritage").
+
+  dasimport:
+    adapter: dasimport       # polite server-rendered HTML (implemented in milestone 3)
+    enabled: false
+    vehicle_types: [car]
+    base_url: https://www.dasimport.nl
+    request_uri: /aanbod
+    rate_limit_seconds: 3.0
+    notes: Single importer; numeric brand/model IDs; prices already NL-landed (incl. BPM).
+
+  bmw-de:
+    adapter: bmw_de          # SPA; Playwright live transport (implemented in milestone 4)
+    enabled: false
+    vehicle_types: [car]
+    base_url: https://www.bmw.de
+    request_uri: /de-de/sl/gebrauchtwagen/results
+    rate_limit_seconds: 4.0
+    notes: >
+      robots-clean but WAF-blocks non-browser clients. Built vs fixtures; live transport
+      via Playwright, to be verified on a NL network. Falls back to URL-import if challenged.
+
+  marktplaats:
+    adapter: url_import      # single-listing URL import only (milestone 5)
+    enabled: false
+    vehicle_types: [car, motorcycle]
+    base_url: https://www.marktplaats.nl
+    notes: >
+      Search API is robots-disallowed (/lrp/api/search*). Individual listing pages are
+      allowed; import one pasted URL (tracking params stripped). No automated search.
+
+  mobile-de:
+    adapter: manual          # manual entry only (milestone 5)
+    enabled: false
+    vehicle_types: [car, motorcycle]
+    base_url: https://www.mobile.de
+    notes: Listing pages robots-disallowed. Manual entry / paste-the-saved-page only.

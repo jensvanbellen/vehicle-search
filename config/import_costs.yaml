@@ -1,0 +1,26 @@
+# German-import cost ESTIMATE assumptions. PLACEHOLDERS — manually maintained, NOT an
+# authoritative Dutch BPM/registration calculation. Every estimate is labelled and its
+# components shown. Keyed off the vehicle's physical country (DE => import applies).
+#
+# These are deliberately crude. Replace with your own researched figures. The app NEVER
+# presents these as official amounts.
+
+enabled: true
+disclaimer: >
+  Rough, manually-maintained placeholder estimate of the extra cost to import a German
+  car to NL. NOT an official BPM/RDW calculation. Verify before relying on it.
+
+# Flat component placeholders (EUR), shown as separate line items.
+components:
+  transport: 400          # collection/transport DE -> NL
+  rdw_inspection: 150     # RDW identification/inspection
+  registration_admin: 200 # plates, paperwork, agency fee
+  bpm_estimate_default: 2500   # placeholder BPM; varies enormously by CO2/age/value
+
+# Optional per-model BPM overrides (still placeholders).
+bpm_overrides:
+  X5: 4000        # plug-in/large SUV BPM tends to be high
+  S 1000 XR: 0    # motorcycles: BPM generally not applicable the same way
+
+# Motorcycles: BPM treatment differs; default to no BPM line for bikes.
+motorcycle_bpm: 0

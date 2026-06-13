@@ -78,6 +78,14 @@ reportMissingTypeStubs = false       # selectolax/imagehash ship no stubs
 venvPath = "."
 venv = ".venv"
 
+# src/ stays fully strict. Tests interact with loosely-typed third-party utilities
+# (Starlette TestClient, fixture loaders), so relax only the "unknown type" reports there.
+[[tool.pyright.executionEnvironments]]
+root = "tests"
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
+
 # ----------------------------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]

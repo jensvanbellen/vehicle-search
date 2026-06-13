@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ v.title }} — Vehicle Finder{% endblock %}
+{% block subtitle %}<a href="/">← back to listings</a>{% endblock %}
+{% block content %}
+<h2 style="margin:0 0 4px">{{ v.title }} <span class="badge">{{ v.source }}</span></h2>
+<p class="muted">{{ v.variant or '' }} · {{ v.model_year or '?' }} · score
+  <strong class="score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</strong>
+  · <a href="{{ v.url }}" target="_blank" rel="noopener">open original listing ↗</a></p>
+
+{% if v.images %}
+<div class="gallery card">{% for img in v.images[:8] %}<img src="{{ img }}" alt="" loading="lazy"/>{% endfor %}</div>
+{% endif %}
+
+<div class="card">
+  <h3>Specifications</h3>
+  <div class="grid">
+    <div><b>Price</b>{{ '€{:,}'.format(v.price) if v.price else '—' }}</div>
+    <div><b>Mileage</b>{{ '{:,} km'.format(v.mileage_km) if v.mileage_km else '—' }}</div>
+    <div><b>Registration</b>{{ v.registration_date or '—' }}</div>
+    <div><b>Power</b>{{ (v.power_hp ~ ' hp') if v.power_hp else '—' }}</div>
+    <div><b>Displacement</b>{{ (v.displacement_cc ~ ' cc') if v.displacement_cc else '—' }}</div>
+    <div><b>Fuel</b>{{ v.fuel_type or '—' }}</div>
+    <div><b>Transmission</b>{{ v.transmission or '—' }}</div>
+    <div><b>Body</b>{{ v.body_style or '—' }}</div>
+    <div><b>Colour</b>{{ v.colour or '—' }}</div>
+    <div><b>Country</b>{{ v.country or '—' }}</div>
+    <div><b>Distance</b>{{ '%.0f km (straight-line)'|format(v.distance_km) if v.distance_km is not none else '—' }}</div>
+    <div><b>Seller</b>{{ v.seller_name or '—' }} ({{ v.seller_type }})</div>
+    <div><b>Warranty</b>{{ v.warranty or '—' }}</div>
+    <div><b>Kenteken</b>{{ v.kenteken or '—' }}</div>
+    <div><b>VIN</b>{{ v.vin or '—' }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Score breakdown</h3>
+  <table>
+    {% for line in v.score_breakdown %}
+    <tr><td>{{ line.label }}</td>
+        <td class="num {{ 'pos' if line.points >= 0 else 'neg' }}">{{ '%+.1f'|format(line.points) }}</td></tr>
+    {% endfor %}
+    <tr><td><strong>Total</strong></td><td class="num score">{{ '%.1f'|format(v.score) if v.score is not none else '—' }}</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Equipment</h3>
+  <p class="chips">{% for f in v.scored_features %}<span>{{ f }}</span>{% else %}<span class="muted">none detected</span>{% endfor %}</p>
+  {% if v.low_conf_features %}
+  <p class="muted">Possibly equipped (low confidence): {{ v.low_conf_features | join(', ') }}</p>
+  {% endif %}
+</div>
+
+{% if v.price_history and v.price_history|length > 1 %}
+<div class="card">
+  <h3>Price history</h3>
+  <table>
+    {% for h in v.price_history %}
+    <tr><td>{{ h.observed_at }}</td><td class="num">{{ '€{:,}'.format(h.price) if h.price else '—' }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if v.data_quality %}
+<div class="card"><h3 class="warn">Data-quality warnings</h3>
+  <ul>{% for w in v.data_quality %}<li class="warn">{{ w }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+{% if v.description %}
+<div class="card"><h3>Original description</h3><p class="muted">{{ v.description }}</p></div>
+{% endif %}
+{% endblock %}

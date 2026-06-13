@@ -1,0 +1,48 @@
+# General (non-scored) equipment normalized for display/completeness. Scored/desirable
+# options live in scoring/features.yaml. Same canonical-key + multilingual-alias format.
+features:
+  leather:
+    label: "Leather upholstery"
+    aliases_de: ["Leder", "Lederausstattung"]
+    aliases_nl: ["leder", "lederen bekleding"]
+    aliases_en: ["leather"]
+
+  led_headlights:
+    label: "LED / adaptive LED headlights"
+    aliases_de: ["LED Scheinwerfer", "Adaptive LED"]
+    aliases_nl: ["adaptieve LED", "LED koplampen"]
+    aliases_en: ["LED headlights", "adaptive LED"]
+
+  navigation:
+    label: "Navigation"
+    aliases_de: ["Navigation", "Navigationssystem"]
+    aliases_nl: ["navigatie", "navigatiesysteem"]
+    aliases_en: ["navigation", "sat nav"]
+
+  parking_sensors:
+    label: "Parking sensors / assistant"
+    aliases_de: ["Parksensoren", "Park Distance Control", "PDC", "Parking Assistant"]
+    aliases_nl: ["parkeersensoren", "parkeerhulp", "parking assistant"]
+    aliases_en: ["parking sensors", "parking assistant", "park distance control"]
+
+  reversing_camera:
+    label: "Reversing camera"
+    aliases_de: ["Rückfahrkamera"]
+    aliases_nl: ["achteruitrijcamera"]
+    aliases_en: ["reversing camera", "rear view camera", "backup camera"]
+
+  comfort_seats:
+    label: "Comfort / sport seats"
+    aliases_de: ["Komfortsitze", "Sportsitze"]
+    aliases_nl: ["comfortzetels", "comfortstoelen", "sportstoelen"]
+    aliases_en: ["comfort seats", "sport seats"]
+
+  dab_radio:
+    label: "DAB radio"
+    aliases_en: ["DAB", "DAB+"]
+
+  lowered_suspension:
+    label: "Lowered suspension"
+    aliases_de: ["Tieferlegung"]
+    aliases_nl: ["verlaagd onderstel", "verlaagd"]
+    aliases_en: ["lowered suspension", "low suspension"]

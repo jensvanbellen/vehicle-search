@@ -1,0 +1,41 @@
+# Explainable scoring weights, per vehicle type. Every component appears as a labelled
+# line in the score breakdown. Tune freely; nothing here is authoritative.
+#
+# Model:
+#   base                : starting score
+#   price_vs_market      : points for being cheaper than the median of comparable listings
+#                          (awarded per `pct_step`% below median, capped)
+#   low_mileage          : points per mileage_step km below the comparable median (capped)
+#   age                  : penalty per year of age beyond `age_grace_years` (capped)
+#   required_equipment   : penalty if a required feature is absent
+#   preferred_equipment  : points per preferred feature present (confidence-gated)
+#   warranty_dealer      : bonus for a manufacturer/dealer warranty
+#   seller_dealer        : bonus/penalty by seller type
+#   distance             : penalty per `distance_step` km from home (capped)
+#   import_friction      : penalty for a foreign (DE) listing (import hassle)
+#   completeness         : bonus when key fields are present (trust/quality)
+
+defaults: &defaults
+  base: 20
+  price_vs_market: { pct_step: 5, points_per_step: 3, cap: 24 }
+  low_mileage: { mileage_step: 10000, points_per_step: 2, cap: 12 }
+  age: { age_grace_years: 1, penalty_per_year: 2, cap: 16 }
+  required_equipment_missing_penalty: 25
+  preferred_equipment_points: 3      # default per-feature; scoring/features.yaml may override
+  warranty_dealer_bonus: 7
+  seller_dealer_bonus: 2
+  seller_private_bonus: 0
+  distance: { distance_step_km: 100, penalty_per_step: 1.5, cap: 9 }
+  import_friction_penalty: 5         # DE listing
+  completeness_bonus: 5
+
+car:
+  <<: *defaults
+  # cars depreciate steeply on mileage; weight mileage a touch more
+  low_mileage: { mileage_step: 10000, points_per_step: 2.5, cap: 15 }
+
+motorcycle:
+  <<: *defaults
+  # bikes: mileage matters but lower absolute km; tighter step
+  low_mileage: { mileage_step: 5000, points_per_step: 2, cap: 12 }
+  age: { age_grace_years: 1, penalty_per_year: 1.5, cap: 12 }
