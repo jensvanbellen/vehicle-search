@@ -49,9 +49,13 @@ def init_database(engine: Engine | None = None) -> None:
 
 @contextmanager
 def session_scope(engine: Engine | None = None) -> Generator[Session, None, None]:
-    """Transactional session context: commit on success, rollback on error."""
+    """Transactional session context: commit on success, rollback on error.
+
+    ``expire_on_commit=False`` keeps returned objects usable after the block exits (the
+    CLI/imports read attributes off the returned listing once the session has closed).
+    """
     eng = engine or get_engine()
-    session = Session(eng)
+    session = Session(eng, expire_on_commit=False)
     try:
         yield session
         session.commit()

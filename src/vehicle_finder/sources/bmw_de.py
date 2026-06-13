@@ -354,11 +354,12 @@ class BmwDeAdapter:
             ) from exc
 
         # Dump raw captures so the real STOLO field names can be validated on first run.
+        # NOTE: write the FULL valid JSON — never slice the string (that corrupts it).
         if captured:
             raw_dir = REPO_ROOT / "data" / "raw"
             raw_dir.mkdir(parents=True, exist_ok=True)
             (raw_dir / "bmwde_last_capture.json").write_text(
-                json.dumps(captured, indent=1)[:2_000_000], encoding="utf-8"
+                json.dumps(captured, indent=1), encoding="utf-8"
             )
 
         best = max((c for c in captured), key=lambda c: len(_find_offer_list(c)), default=None)
