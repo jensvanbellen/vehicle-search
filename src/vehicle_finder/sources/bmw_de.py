@@ -286,8 +286,7 @@ def _accident_info(lifecycle: dict[str, Any]) -> str | None:
     damage = lifecycle.get("vehicleDamage")
     damage_d = cast("dict[str, Any]", damage) if isinstance(damage, dict) else {}
     involved = (
-        lifecycle.get("involvedInAccident") is True
-        or damage_d.get("involvedInAccident") is True
+        lifecycle.get("involvedInAccident") is True or damage_d.get("involvedInAccident") is True
     )
     description = damage_d.get("damageDescription")
     repaired = damage_d.get("isRepaired")
@@ -373,6 +372,11 @@ def _extract_records(data: Any) -> list[dict[str, Any]]:
             if records:
                 return records
     return _find_offer_list(data)
+
+
+def _any_records(captured: list[dict[str, Any]]) -> bool:
+    """True once at least one captured payload contains offer records."""
+    return any(_extract_records(c) for c in captured)
 
 
 def _combined_hits_payload(payloads: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -621,6 +625,9 @@ def parse_offers(
             continue
         if parsed is None:
             failures += 1
+        elif parsed.model is None and parsed.price is None and parsed.mileage_km is None:
+            # Junk hit (e.g. a featured/empty record) with an id but no usable data — skip.
+            failures += 1
         else:
             listings.append(parsed)
     return listings, len(records), failures, warnings, False
@@ -666,9 +673,7 @@ class BmwDeAdapter:
                 target.max_year,
                 engine_type=_bmw_engine_type(target, codes),
                 max_mileage=parse_int(codes.get("max_mileage")) or target.max_mileage,
-                equipment_groups=cast(
-                    "dict[str, list[str]] | None", codes.get("equipment_groups")
-                ),
+                equipment_groups=cast("dict[str, list[str]] | None", codes.get("equipment_groups")),
             ),
         )
         try:
@@ -768,9 +773,15 @@ class BmwDeAdapter:
                 page.goto(url, wait_until="domcontentloaded", timeout=45000)
                 page.wait_for_timeout(2500)
                 self._accept_consent(page)
-                for _ in range(_SCROLL_STEPS):
-                    page.mouse.wheel(0, 4000)
-                    page.wait_for_timeout(1200)
+                self._wait_for_results(page, captured)
+                if not _any_records(captured):
+                    # Transient: the SPA hadn't surfaced results before we proceeded.
+                    # Reload once and wait again (the consent cookie now persists).
+                    log.info("bmw_de_retry", reason="no results on first pass")
+                    page.reload(wait_until="domcontentloaded", timeout=45000)
+                    page.wait_for_timeout(2500)
+                    self._accept_consent(page)
+                    self._wait_for_results(page, captured)
                 self._click_load_more_pages(page)
                 self._fetch_additional_search_pages(page, search_requests, captured)
                 html = page.content()
@@ -795,6 +806,17 @@ class BmwDeAdapter:
             (c for c in captured), key=lambda c: len(_extract_records(c)), default=None
         )
         return best, html, title
+
+    @staticmethod
+    def _wait_for_results(page: Any, captured: list[dict[str, Any]]) -> None:
+        """Scroll + poll until the first hits-bearing STOLO response is captured (or budget
+        runs out). Exits early as soon as results appear — fixes the 'found=0' race where
+        pagination ran before the initial search response landed."""
+        for _ in range(_SCROLL_STEPS + 8):
+            if _any_records(captured):
+                return
+            page.mouse.wheel(0, 4000)
+            page.wait_for_timeout(1200)
 
     @staticmethod
     def _accept_consent(page: Any) -> None:

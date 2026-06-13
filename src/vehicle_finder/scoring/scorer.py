@@ -242,7 +242,8 @@ class Scorer:
         if present >= 4:
             lines.append(ScoreLine("Listing complete", float(w.get("completeness_bonus", 5))))
 
-        # Character/aesthetic penalties (big wheels, all-black/Shadow Line, M aero, lowered).
+        # Character adjustments from text: penalties (big wheels, Shadow Line, M aero,
+        # lowered, light interior) and rewards (black/dark interior). Points may be + or -.
         text = " ".join(
             p for p in (listing.title, listing.description, listing.raw_options_text) if p
         )

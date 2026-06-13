@@ -68,9 +68,7 @@ def test_accident_history_is_penalised() -> None:
     damaged = _car("damaged", 50000, 100000, 2021, ["panoramic_roof"])
     damaged.accident_info = "Accident history reported"
     result = Scorer().compute_scores([damaged], TARGET, reference_year=2026)[0]
-    assert any(
-        line.points < 0 and "Accident/damage history" in line.label for line in result.lines
-    )
+    assert any(line.points < 0 and "Accident/damage history" in line.label for line in result.lines)
 
 
 def test_rare_option_shows_frequency() -> None:
@@ -99,6 +97,17 @@ def test_sporty_spec_is_penalised() -> None:
     assert any("Shadow Line" in line.label for line in results[0].lines)
     # Same equipment, but the sporty car scores lower thanks to the character penalties.
     assert results[0].total < results[1].total
+
+
+def test_interior_colour_preference() -> None:
+    black = _car("black", 50000, 100000, 2021, ["panoramic_roof"])
+    black.raw_options_text = "Vollleder Merino Schwarz"
+    light = _car("light", 50000, 100000, 2021, ["panoramic_roof"])
+    light.raw_options_text = "Vollleder Merino Elfenbeinweiss"
+    results = Scorer().compute_scores([black, light], TARGET, reference_year=2026)
+    assert any(line.points > 0 and "Black" in line.label for line in results[0].lines)
+    assert any(line.points < 0 and "Light" in line.label for line in results[1].lines)
+    assert results[0].total > results[1].total  # black interior preferred
 
 
 def test_cheaper_listing_gets_price_bonus() -> None:

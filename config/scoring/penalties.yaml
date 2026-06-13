@@ -1,6 +1,6 @@
-# Aesthetic / character penalties — subtract points for the "cosmetically sporty,
-# all-black, oversized-wheel" traits the X5 brief asks to penalize (not reject).
-# Detected from the listing text (title + description + options), NL/DE/EN. Tune freely.
+# Character / aesthetic score adjustments, detected from the listing text (title +
+# description + options), NL/DE/EN. Points may be NEGATIVE (penalty) or POSITIVE (reward).
+# Tune freely.
 #
 # NOTE: M Sport itself is intentionally NOT penalised (the brief: don't reward it, but
 # don't reject a good car for it). Only the aggressive cosmetic add-ons are penalised.
@@ -23,4 +23,21 @@ penalties:
   lowered_suspension:
     label: "Lowered suspension"
     aliases: ["verlaagd", "tieferlegung", "lowered", "h&r veren", "lowering springs"]
+    points: -5
+
+  # ---- Interior colour preference (black/dark = easy to keep clean; light = a chore) ----
+  # Interior-specific colour names only, so they don't match an exterior "Schwarz".
+  black_interior:
+    label: "Black / dark interior (easy to keep clean)"
+    aliases: ["leder schwarz", "leder zwart", "zwart leder", "merino schwarz", "vernasca schwarz",
+              "sensatec schwarz", "nappa schwarz", "dakota schwarz", "leder anthrazit",
+              "anthrazit leder", "interieur schwarz", "interieur zwart", "black leather", "zwart interieur"]
+    points: 6
+
+  light_interior:
+    label: "Light/pale interior (harder to keep clean)"
+    aliases: ["elfenbeinweiss", "elfenbeinweiß", "elfenbein", "rauchweiss", "rauchweiß",
+              "ivory", "oyster", "canberrabeige", "canberra beige", "mokka", "tartufo",
+              "cremebeige", "creme beige", "beige leder", "leder beige", "white leather",
+              "leder weiss", "leder weiß", "wit leder", "smoke white"]
     points: -5
