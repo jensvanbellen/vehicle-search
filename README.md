@@ -94,8 +94,9 @@ scheduler in v1**, but `fetch` is structured so a cron job / GitHub Action could
 All tunables live in human-editable YAML under `config/` — nothing business-specific is
 hard-coded:
 
-- `config/searches.yaml` — search targets (X5 G05, S 1000 XR, R 1300 RS, R 12 nineT) with
-  per-source model codes, year/price/mileage filters, preferred equipment, countries.
+- `config/searches.yaml` — search targets with per-source model codes, year/price/mileage
+  filters, preferred equipment, countries. The included searches are BMW examples — replace
+  them with your own make/model targets.
 - `config/sources.yaml` — per-source adapter, base URL, enable flag, polite rate limit.
 - `config/scoring/weights.yaml` — explainable scoring weights, **per vehicle type**.
 - `config/scoring/features.yaml` — rare/desirable options: multilingual aliases, points,
