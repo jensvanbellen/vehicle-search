@@ -104,7 +104,7 @@ hard-coded:
 - `config/dedup.yaml` — merge signals, weights, and thresholds.
 - `config/import_costs.yaml` — German-import cost **placeholders** (clearly labelled).
 
-Your postcode (`2548 AE`) is a default in `searches.yaml` / `.env`, never hard-coded.
+Your home postcode is a default in `searches.yaml` / `.env` (set `home_postcode:` or `VF_HOME_POSTCODE`), never hard-coded.
 
 ### Add a vehicle model
 

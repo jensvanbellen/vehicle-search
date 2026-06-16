@@ -230,7 +230,7 @@ separate, clearly-labelled estimate from `import_costs.yaml` placeholders — ne
 presented as an authoritative BPM calculation; keyed off physical country.
 
 Distance: bundled **offline** NL+DE postcode→centroid table + haversine, labelled
-**straight-line** (postcode `2548 AE`, configurable, never hard-coded).
+**straight-line** (configurable via `home_postcode` in `searches.yaml` or `VF_HOME_POSTCODE`, never hard-coded).
 
 ---
 

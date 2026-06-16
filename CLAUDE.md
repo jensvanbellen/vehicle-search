@@ -26,7 +26,7 @@ Pinned conventions for this repo. Keep yourself consistent with these across ses
   `vehicle_type` field (`car` | `motorcycle`) on a single flat model with nullable extensions.
 - Keep source adapters behind the common `SourceAdapter` protocol in `sources/base.py`.
 - Config (model codes, synonyms, scoring weights, thresholds) lives in `config/*.yaml`,
-  **never hard-coded** in logic. Postcode `2548 AE` is a default in config, not a constant.
+  **never hard-coded** in logic. Home postcode is a default in `searches.yaml`, not a constant.
 
 ## Git / commits
 - **Conventional commits** (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).

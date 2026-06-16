@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     # Core
     db_path: Path = Field(default=Path("data/vehicles.db"))
     config_dir: Path = Field(default=Path("config"))
-    home_postcode: str = Field(default="2548 AE")
+    home_postcode: str = Field(default="2512 AB")
     log_level: str = Field(default="INFO")
     log_json: bool = Field(default=False)
 

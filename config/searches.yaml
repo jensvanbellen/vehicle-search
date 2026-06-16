@@ -2,7 +2,7 @@
 # Per-source codes were verified against the live BMW lineup (June 2026).
 # NOTE: equipment lists and year cutoffs are best-effort assumptions — tune freely.
 
-home_postcode: "2548 AE"   # default; overridable via VF_HOME_POSTCODE
+home_postcode: "2512 AB"   # example (Den Haag Centrum); overridable via VF_HOME_POSTCODE
 
 searches:
   # ----------------------------------------------------------------- MOTORCYCLES
