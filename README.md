@@ -163,3 +163,9 @@ Conventions are pinned in [`CLAUDE.md`](CLAUDE.md).
 `.gitignore` excludes the listings DB, `.env`, exports, cookies, browser profiles, and the
 Playwright profile. Notifications send **nothing** unless explicitly enabled. The German
 import-cost figures are **labelled placeholders**, not an authoritative BPM calculation.
+
+## License
+
+Original code and documentation are licensed under the [MIT License](LICENSE).
+Third-party names, trademarks, source-derived fixture content, and externally fetched data
+are not included in that grant; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
